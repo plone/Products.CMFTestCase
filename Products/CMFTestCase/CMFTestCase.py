@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.6 2004/02/07 12:34:30 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.7 2004/02/10 23:27:33 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -51,6 +51,12 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
         folder.changeOwnership(user)
         folder.__ac_local_roles__ = None
         folder.manage_setLocalRoles(member_id, ['Owner'])
+
+    def loginAsPortalOwner(self):
+        '''Use if you need to manipulate the portal itself.'''
+        uf = self.app.acl_users
+        user = uf.getUserById(portal_owner).__of__(uf)
+        newSecurityManager(None, user)
 
 
 class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
