@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.3 2003/11/25 21:33:53 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.4 2003/11/27 19:44:22 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -106,13 +106,13 @@ def _setupCMFSite(app, id=portal_name, quiet=0):
 
 
 # Save away before _optimize patches over it
-from Products.CMFDefault.Portal import PortalGenerator as _pg
-_setupDefaultSkins = _pg.setupDefaultSkins
+from Products.CMFDefault.Portal import PortalGenerator as _PortalGenerator
+_setupDefaultSkins = _PortalGenerator.setupDefaultSkins
 
 
 def _setupCMFSkins(app, id=portal_name, quiet=0):
     '''Creates the default skin directories.'''
-    portal = app[portal_name]
+    portal = app[id]
     if not hasattr(aq_base(portal.portal_skins), 'zpt_content'):
         _start = time.time()
         if not quiet: ZopeTestCase._print('Adding CMF Skins ... ')
@@ -120,7 +120,7 @@ def _setupCMFSkins(app, id=portal_name, quiet=0):
         user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
         newSecurityManager(None, user)
         # Add CMF skins
-        _setupDefaultSkins(_pg(), portal)
+        _setupDefaultSkins(_PortalGenerator(), portal)
         # Log out and commit
         noSecurityManager()
         get_transaction().commit()
