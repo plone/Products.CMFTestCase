@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.1 2003/11/17 21:25:00 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.2 2003/11/25 17:27:28 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -24,6 +24,12 @@ default_user = ZopeTestCase.user_name
 
 
 class CMFTestCase(ZopeTestCase.PortalTestCase):
+    '''Base test case for CMF testing
+
+       __implements__ = (IPortalTestCase, ISimpleSecurity, IExtensibleSecurity)
+
+       See the ZopeTestCase docs for more
+    '''
 
     def getPortal(self):
         '''Returns the portal object.'''
