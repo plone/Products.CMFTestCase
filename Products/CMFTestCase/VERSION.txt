@@ -1,8 +1,8 @@
-CMFTestCase 0.5.0
+CMFTestCase 0.6.0a1
 (c) 2003, Stefan H. Holek, stefan@epy.co.at 
 http://www.zope.org/Members/shh/
 License: ZPL
-Zope: 2.4-2.7
+Zope: 2.5-2.7
 
 Note: This is an add-on to the ZopeTestCase package
 and will not function without.

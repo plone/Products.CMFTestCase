@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.5 2003/12/28 20:41:11 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.6 2004/02/07 12:34:30 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -18,7 +18,7 @@ import time
 from Testing.ZopeTestCase import installProduct
 from Testing.ZopeTestCase import hasProduct
 
-portal_name  = 'cmf'
+portal_name = 'cmf'
 portal_owner = 'portal_owner'
 default_user = ZopeTestCase.user_name
 
@@ -51,6 +51,10 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
         folder.changeOwnership(user)
         folder.__ac_local_roles__ = None
         folder.manage_setLocalRoles(member_id, ['Owner'])
+
+
+class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
+    '''Convenience class for functional unit testing'''
 
 
 def setupCMFSite(id=portal_name, quiet=0):
@@ -94,7 +98,7 @@ def _setupCMFSite(app, id=portal_name, quiet=0):
     '''Creates a CMF site.'''
     if not hasattr(aq_base(app), id):
         _optimize()
-        _start = time.time()
+        start = time.time()
         if not quiet: ZopeTestCase._print('Adding CMF Site ... ')
         # Add user and log in
         app.acl_users._doAddUser(portal_owner, '', ['Manager'], [])
@@ -106,7 +110,7 @@ def _setupCMFSite(app, id=portal_name, quiet=0):
         # Log out and commit
         noSecurityManager()
         get_transaction().commit()
-        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
+        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-start,))
 
 
 # Save away before _optimize patches over it
@@ -118,7 +122,7 @@ def _setupCMFSkins(app, id=portal_name, quiet=0):
     '''Creates the default skin directories.'''
     portal = app[id]
     if not hasattr(aq_base(portal.portal_skins), 'zpt_content'):
-        _start = time.time()
+        start = time.time()
         if not quiet: ZopeTestCase._print('Adding CMF Skins ... ')
         # Log in
         user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
@@ -128,5 +132,5 @@ def _setupCMFSkins(app, id=portal_name, quiet=0):
         # Log out and commit
         noSecurityManager()
         get_transaction().commit()
-        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
+        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-start,))
 

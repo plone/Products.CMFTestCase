@@ -17,6 +17,9 @@ CMFTestCase Readme
 
         - The CMFTestCase base class of which to derive your test cases.
 
+        - The FunctionalTestCase base class of which to derive your test 
+          cases for functional CMF tests.
+
 
     Example CMFTestCase::
 
