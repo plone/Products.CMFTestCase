@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.20 2005/01/03 17:27:54 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.21 2005/01/03 18:50:39 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -55,7 +55,9 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
     def loginAsPortalOwner(self):
         '''Use this when you need to manipulate the portal itself.'''
         uf = self.app.acl_users
-        user = uf.getUserById(portal_owner).__of__(uf)
+        user = uf.getUserById(portal_owner)
+        if not hasattr(user, 'aq_base'):
+            user = user.__of__(uf)
         newSecurityManager(None, user)
 
 
