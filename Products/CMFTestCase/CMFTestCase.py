@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.2 2003/11/25 17:27:28 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.3 2003/11/25 21:33:53 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -53,6 +53,20 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
         folder.manage_setLocalRoles(member_id, ['Owner'])
 
 
+def setupCMFSite(id=portal_name, quiet=0):
+    '''Creates a CMF site.'''
+    app = ZopeTestCase.app()
+    _setupCMFSite(app, id, quiet)
+    ZopeTestCase.close(app)
+
+
+def setupCMFSkins(id=portal_name, quiet=0):
+    '''Creates the default skin directories.'''
+    app = ZopeTestCase.app()
+    _setupCMFSkins(app, id, quiet)
+    ZopeTestCase.close(app)
+
+
 def _optimize():
     '''Reduces portal creation time.'''
     # Don't compile expressions on creation
@@ -91,13 +105,6 @@ def _setupCMFSite(app, id=portal_name, quiet=0):
         if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
 
 
-def setupCMFSite(id=portal_name, quiet=0):
-    '''Creates a CMF site.'''
-    app = ZopeTestCase.app()
-    _setupCMFSite(app, id, quiet)
-    ZopeTestCase.close(app)
-
-
 # Save away before _optimize patches over it
 from Products.CMFDefault.Portal import PortalGenerator as _pg
 _setupDefaultSkins = _pg.setupDefaultSkins
@@ -118,11 +125,4 @@ def _setupCMFSkins(app, id=portal_name, quiet=0):
         noSecurityManager()
         get_transaction().commit()
         if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-_start,))
-
-
-def setupCMFSkins(id=portal_name, quiet=0):
-    '''Creates the default skin directories.'''
-    app = ZopeTestCase.app()
-    _setupCMFSkins(app, id, quiet)
-    ZopeTestCase.close(app)
 
