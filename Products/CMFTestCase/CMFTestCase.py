@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.21 2005/01/03 18:50:39 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.22 2005/01/05 01:11:13 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -44,10 +44,10 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
             raise ValueError, 'Member %s does not exist' % member_id
         if not hasattr(user, 'aq_base'):
             user = user.__of__(uf)
-        membership = self.portal.portal_membership
-        members = membership.getMembersFolder()
+        pm = self.portal.portal_membership
+        members = pm.getMembersFolder()
         members.manage_addPortalFolder(member_id)
-        folder = membership.getHomeFolder(member_id)
+        folder = pm.getHomeFolder(member_id)
         folder.changeOwnership(user)
         folder.__ac_local_roles__ = None
         folder.manage_setLocalRoles(member_id, ['Owner'])
