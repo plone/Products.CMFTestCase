@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.13 2004/09/04 21:47:48 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.14 2004/09/06 16:55:07 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -69,14 +69,14 @@ class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
     '''Convenience class for functional unit testing'''
 
 
-def setupCMFSite(portal_name=portal_name, quiet=0):
+def setupCMFSite(id=portal_name, quiet=0):
     '''Creates a CMF site.'''
-    ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
+    ZopeTestCase.utils.appcall(_setupCMFSite, id, quiet)
 
 
-def _setupCMFSite(app, portal_name, quiet):
+def _setupCMFSite(app, id, quiet):
     '''Creates a CMF site.'''
-    if not hasattr(aq_base(app), portal_name):
+    if not hasattr(aq_base(app), id):
         _optimize()
         start = time.time()
         if not quiet: ZopeTestCase._print('Adding CMF Site ... ')
@@ -86,7 +86,7 @@ def _setupCMFSite(app, portal_name, quiet):
         newSecurityManager(None, user)
         # Add CMF site
         factory = app.manage_addProduct['CMFDefault']
-        factory.manage_addCMFSite(portal_name, create_userfolder=1)
+        factory.manage_addCMFSite(id, create_userfolder=1)
         # Log out and commit
         noSecurityManager()
         get_transaction().commit()
