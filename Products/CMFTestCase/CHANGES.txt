@@ -1,4 +1,5 @@
 0.6.0
+- Changed signature of setupCMFSite to allow for an 'app' argument.
 - Removed setupCMFSkins and the ability to setup a CMF site w/o skins.
 - Added FunctionalTestCase convenience class.
 - Made ZopeTestCase.utils module available as CMFTestCase.utils.

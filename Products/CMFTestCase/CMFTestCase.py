@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.9 2004/03/29 10:48:17 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.10 2004/08/21 14:33:36 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -64,9 +64,13 @@ class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
     '''Convenience class for functional unit testing'''
 
 
-def setupCMFSite(portal_name=portal_name, quiet=0):
+def setupCMFSite(app=None, portal_name=portal_name, quiet=0):
     '''Creates a CMF site.'''
-    ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
+    if app is None:
+        ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
+    else:
+        _setupCMFSite(app, portal_name, quiet)
+
 
 def _setupCMFSite(app, portal_name, quiet):
     '''Creates a CMF site.'''
@@ -104,9 +108,4 @@ def _optimize():
         p.manage_addPortalFolder('Members')
     from Products.CMFDefault.Portal import PortalGenerator
     PortalGenerator.setupMembersFolder = setupMembersFolder
-
-
-# b/w compatibility
-def setupCMFSkins(id='', quiet=0): 
-    pass
 
