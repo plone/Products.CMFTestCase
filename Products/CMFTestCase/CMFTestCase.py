@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.11 2004/08/26 19:50:45 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.12 2004/09/04 19:17:07 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -34,7 +34,8 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
 
     def getPortal(self):
         '''Returns the portal object to the bootstrap code.
-           DO NOT CALL THIS METHOD! Use the self.portal
+
+           Do not call this method! Use the self.portal
            attribute to access the portal object from tests.
         '''
         return self.app[portal_name]
@@ -46,7 +47,8 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
         user = uf.getUserById(member_id)
         if user is None:
             raise ValueError, 'Member %s does not exist' % member_id
-        user = user.__of__(uf)
+        if not hasattr(user, 'aq_base'):
+            user = user.__of__(uf)
         # Home folder
         membership = self.portal.portal_membership
         members = membership.getMembersFolder()
@@ -87,7 +89,7 @@ def _setupCMFSite(app, portal_name, quiet):
         newSecurityManager(None, user)
         # Add CMF site
         factory = app.manage_addProduct['CMFDefault']
-        factory.manage_addCMFSite(portal_name, '', create_userfolder=1)
+        factory.manage_addCMFSite(portal_name, create_userfolder=1)
         # Log out and commit
         noSecurityManager()
         get_transaction().commit()
