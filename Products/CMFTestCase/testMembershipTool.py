@@ -13,6 +13,9 @@ from AccessControl.User import nobody
 CMFTestCase.setupCMFSite()
 default_user = CMFTestCase.default_user
 
+try: from zExceptions import BadRequest
+except ImportError: BadRequest = 'BadRequest'
+
 
 class TestMembershipTool(CMFTestCase.CMFTestCase):
 
@@ -72,8 +75,10 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
         self.logout()
         try:
             self.membership.setPassword('geheim')
+        except BadRequest:
+            pass
         except:
-            # String exceptions suck
+            # String exceptions suck (but CMF < 1.5 has them)
             e,v,tb = sys.exc_info(); del tb
             if str(e) != 'Bad Request':
                 raise
@@ -141,6 +146,9 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
         self.failIf(hasattr(aq_base(members), 'user2'))
         self.membership.createMemberarea('user2')
         self.failUnless(hasattr(aq_base(members), 'user2'))
+
+    def testMemberareaCreationFlag(self):
+        self.failIf(self.membership.getMemberareaCreationFlag())
 
     def testWrapUserCreatesMemberarea(self):
         self.membership.setMemberareaCreationFlag()
