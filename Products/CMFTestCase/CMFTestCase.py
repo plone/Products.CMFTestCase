@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.17 2004/12/26 21:50:27 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.18 2005/01/02 19:27:34 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -17,19 +17,18 @@ from setup import default_user
 from setup import default_password
 from setup import setupCMFSite
 
+from interfaces import ICMFSecurity
+
 from AccessControl.SecurityManagement import newSecurityManager
 
 
 class CMFTestCase(ZopeTestCase.PortalTestCase):
-    '''Base test case for CMF testing
+    '''Base test case for CMF testing'''
 
-       __implements__ = (IPortalTestCase, ISimpleSecurity, IExtensibleSecurity)
-
-       See the ZopeTestCase docs for more
-    '''
+    __implements__ = (ICMFSecurity, ZopeTestCase.PortalTestCase.__implements__)
 
     def getPortal(self):
-        '''Returns the portal object to the bootstrap code.
+        '''Returns the portal object to the setup code.
 
            Do not call this method! Use the self.portal
            attribute to access the portal object from tests.
@@ -63,4 +62,7 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
 
 class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
     '''Base class for functional CMF tests'''
+
+    __implements__ = (ZopeTestCase.Functional.__implements__,
+                      CMFTestCase.__implements__)
 

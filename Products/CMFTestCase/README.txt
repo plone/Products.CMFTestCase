@@ -1,3 +1,9 @@
+CMFTestCase 0.6.0
+(c) 2003-2005, Stefan H. Holek, stefan@epy.co.at
+http://zope.org/Members/shh/CMFTestCase
+License: ZPL
+Zope: 2.6-2.8
+
 
 CMFTestCase Readme
 
