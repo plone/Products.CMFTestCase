@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.23 2005/02/11 14:58:47 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.24 2005/02/25 11:02:20 shh42 Exp $
 
 from Testing.ZopeTestCase import PortalTestCase
 from Testing.ZopeTestCase import Functional
@@ -19,6 +19,8 @@ from setup import default_password
 from setup import setupCMFSite
 
 from interfaces import ICMFSecurity
+from AccessControl import getSecurityManager
+from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 
 
@@ -59,6 +61,19 @@ class CMFTestCase(PortalTestCase):
         if not hasattr(user, 'aq_base'):
             user = user.__of__(uf)
         newSecurityManager(None, user)
+
+    def addProduct(self, name):
+        '''Installs a product into the CMF site.'''
+        sm = getSecurityManager()
+        self.loginAsPortalOwner()
+        try:
+            installed = getattr(self.portal, '_installedProducts', {})
+            if not installed.has_key(name):
+                exec 'from Products.%s.Extensions.Install import install' % name
+                install(self.portal)
+                self._refreshSkinData()
+        finally:
+            setSecurityManager(sm)
 
 
 class FunctionalTestCase(Functional, CMFTestCase):

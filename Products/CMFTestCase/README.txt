@@ -17,6 +17,9 @@ CMFTestCase Readme
           test environment.
 
         - The function 'setupCMFSite' to create a CMF portal in the test db.
+          setupCMFSite accepts an optional 'products' argument, that allows you
+          to specify a list of products that will be installed into the portal
+          by executing their Extensions.Install.install method.
 
         - The 'CMFTestCase' base class of which to derive your unit test cases.
 
