@@ -35,6 +35,26 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
         self.assertEqual(home.get_local_roles_for_userid(default_user), ())
         self.failIf(hasattr(aq_base(home), 'index_html'))
 
+    def testAddDocument(self):
+        self.folder.invokeFactory('Document', id='doc')
+        self.failUnless(hasattr(aq_base(self.folder), 'doc'))
+
+    def testEditDocument(self):
+        self.folder.invokeFactory('Document', id='doc')
+        self.folder.doc.edit(text_format='plain', text='data')
+        self.assertEqual(self.folder.doc.EditableBody(), 'data')
+
+    def testPublishDocument(self):
+        self.folder.invokeFactory('Document', id='doc')
+        self.setRoles(['Reviewer'])
+        self.workflow.doActionFor(self.folder.doc, 'publish')
+        self.assertEqual(self.workflow.getInfoFor(self.folder.doc, 'review_state'), 'published')
+        self.failUnless(self.catalog(id='doc', review_state='published'))
+
+    def testSkinScript(self):
+        self.folder.invokeFactory('Document', id='doc', title='Foo')
+        self.assertEqual(self.folder.doc.TitleOrId(), 'Foo')
+
 
 if __name__ == '__main__':
     framework()
