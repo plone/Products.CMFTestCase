@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.12 2004/09/04 19:17:07 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.13 2004/09/04 21:47:48 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -69,12 +69,9 @@ class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
     '''Convenience class for functional unit testing'''
 
 
-def setupCMFSite(app=None, portal_name=portal_name, quiet=0):
+def setupCMFSite(portal_name=portal_name, quiet=0):
     '''Creates a CMF site.'''
-    if app is None:
-        ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
-    else:
-        _setupCMFSite(app, portal_name, quiet)
+    ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
 
 
 def _setupCMFSite(app, portal_name, quiet):
