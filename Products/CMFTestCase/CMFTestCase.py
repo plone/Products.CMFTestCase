@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.4 2003/11/27 19:44:22 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.5 2003/12/28 20:41:11 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -79,10 +79,14 @@ def _optimize():
         return list(self._actions)
     from Products.CMFCore.ActionProviderBase import ActionProviderBase
     ActionProviderBase._cloneActions = _cloneActions
+    # Don't setup 'index_html' in Members folder
+    def setupMembersFolder(self, p):
+        p.manage_addPortalFolder('Members')
+    from Products.CMFDefault.Portal import PortalGenerator
+    PortalGenerator.setupMembersFolder = setupMembersFolder
     # Don't setup default skins
     def setupDefaultSkins(self, p):
         pass
-    from Products.CMFDefault.Portal import PortalGenerator
     PortalGenerator.setupDefaultSkins = setupDefaultSkins
 
 
