@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.18 2005/01/02 19:27:34 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.19 2005/01/03 16:33:25 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -25,7 +25,8 @@ from AccessControl.SecurityManagement import newSecurityManager
 class CMFTestCase(ZopeTestCase.PortalTestCase):
     '''Base test case for CMF testing'''
 
-    __implements__ = (ICMFSecurity, ZopeTestCase.PortalTestCase.__implements__)
+    __implements__ = (ICMFSecurity,
+                      ZopeTestCase.PortalTestCase.__implements__)
 
     def getPortal(self):
         '''Returns the portal object to the setup code.
