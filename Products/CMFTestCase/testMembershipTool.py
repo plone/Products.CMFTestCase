@@ -7,12 +7,10 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Products.CMFTestCase import CMFTestCase
+from Acquisition import aq_base
+from AccessControl.User import nobody
 
 CMFTestCase.setupCMFSite()
-
-from AccessControl.User import nobody
-from Acquisition import aq_base
-
 default_user = CMFTestCase.default_user
 
 

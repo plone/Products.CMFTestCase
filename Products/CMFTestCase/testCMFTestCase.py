@@ -10,7 +10,6 @@ from Products.CMFTestCase import CMFTestCase
 from Acquisition import aq_base
 
 CMFTestCase.setupCMFSite()
-
 default_user = CMFTestCase.default_user
 
 
