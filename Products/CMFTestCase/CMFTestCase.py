@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.19 2005/01/03 16:33:25 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.20 2005/01/03 17:27:54 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -38,14 +38,12 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
 
     def createMemberarea(self, member_id):
         '''Creates a minimal memberarea.'''
-        # Owner
         uf = self.portal.acl_users
         user = uf.getUserById(member_id)
         if user is None:
             raise ValueError, 'Member %s does not exist' % member_id
         if not hasattr(user, 'aq_base'):
             user = user.__of__(uf)
-        # Home folder
         membership = self.portal.portal_membership
         members = membership.getMembersFolder()
         members.manage_addPortalFolder(member_id)
