@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.10 2004/08/21 14:33:36 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.11 2004/08/26 19:50:45 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -33,7 +33,10 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
     '''
 
     def getPortal(self):
-        '''Returns the portal object.'''
+        '''Returns the portal object to the bootstrap code.
+           DO NOT CALL THIS METHOD! Use the self.portal
+           attribute to access the portal object from tests.
+        '''
         return self.app[portal_name]
 
     def createMemberarea(self, member_id):
