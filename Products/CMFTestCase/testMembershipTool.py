@@ -7,10 +7,11 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Products.CMFTestCase import CMFTestCase
-from AccessControl.User import nobody
-from Acquisition import aq_base
 
 CMFTestCase.setupCMFSite()
+
+from AccessControl.User import nobody
+from Acquisition import aq_base
 
 default_user = CMFTestCase.default_user
 
@@ -188,8 +189,8 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
 if __name__ == '__main__':
     framework()
 else:
-    from unittest import TestSuite, makeSuite
     def test_suite():
+        from unittest import TestSuite, makeSuite
         suite = TestSuite()
         suite.addTest(makeSuite(TestMembershipTool))
         return suite
