@@ -1,4 +1,4 @@
-CMFTestCase 0.2.0
+CMFTestCase 0.5.0
 (c) 2003, Stefan H. Holek, stefan@epy.co.at 
 http://www.zope.org/Members/shh/
 License: ZPL
