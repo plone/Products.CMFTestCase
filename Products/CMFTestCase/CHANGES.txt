@@ -1,7 +1,10 @@
 0.6.0
-- Removed setupCMFSkins and the ability to setup a CMF site w/o skins.
-- Added FunctionalTestCase convenience class.
-- Made ZopeTestCase.utils module available as CMFTestCase.utils.
+- setupCMFSite() now accepts a 'products' argument, allowing to specify
+  a list of products that should be added to the portal by executing their 
+  respective Extensions.Install.install() functions.
+- Removed setupCMFSkins() and the ability to setup a CMF site w/o skins.
+- Added a FunctionalTestCase convenience class.
+- Made the ZopeTestCase.utils module available as CMFTestCase.utils.
 
 0.5.0
 - Package for testing CMF-based products and applications. 

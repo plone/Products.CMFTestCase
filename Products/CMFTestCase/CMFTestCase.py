@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.15 2004/09/12 13:53:45 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.16 2004/09/14 18:49:29 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -12,6 +12,7 @@ from Testing.ZopeTestCase import utils
 
 from setup import portal_name
 from setup import portal_owner
+from setup import default_products
 from setup import default_user
 from setup import setupCMFSite
 
