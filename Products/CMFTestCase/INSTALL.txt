@@ -5,7 +5,7 @@ Installation Instructions for CMFTestCase
 
     Requires CMF 1.3 or higher.
 
-    Requires ZopeTestCase 0.9.4 or higher.
+    Requires ZopeTestCase 0.9.6 or higher.
 
     1. Extract the tarball into the 'Products' directory of a
        CMF-enabled Zope instance.
