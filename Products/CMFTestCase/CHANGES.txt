@@ -1,0 +1,8 @@
+0.6.0
+- Removed setupCMFSkins and the ability to setup a CMF site w/o skins.
+- Added FunctionalTestCase convenience class.
+- Made ZopeTestCase.utils module available as CMFTestCase.utils.
+
+0.5.0
+- Package for testing CMF-based products and applications. 
+

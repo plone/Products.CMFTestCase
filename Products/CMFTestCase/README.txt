@@ -12,13 +12,12 @@ CMFTestCase Readme
 
         - The method setupCMFSite() to create a CMF portal in the test db.
 
-        - The method setupCMFSkins() to setup the CMF skin directories in
-          a portal previously created by setupCMFSite().
+        - The utils module known from the ZopeTestCase package.
 
         - The CMFTestCase base class of which to derive your test cases.
 
         - The FunctionalTestCase base class of which to derive your test 
-          cases for functional CMF tests.
+          cases for functional unit tests.
 
 
     Example CMFTestCase::

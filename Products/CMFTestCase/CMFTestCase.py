@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.7 2004/02/10 23:27:33 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.8 2004/02/18 21:49:08 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -17,6 +17,7 @@ import time
 
 from Testing.ZopeTestCase import installProduct
 from Testing.ZopeTestCase import hasProduct
+from Testing.ZopeTestCase import utils
 
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
@@ -63,18 +64,28 @@ class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
     '''Convenience class for functional unit testing'''
 
 
-def setupCMFSite(id=portal_name, quiet=0):
+def setupCMFSite(portal_name=portal_name, quiet=0):
     '''Creates a CMF site.'''
-    app = ZopeTestCase.app()
-    _setupCMFSite(app, id, quiet)
-    ZopeTestCase.close(app)
+    ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
 
 
-def setupCMFSkins(id=portal_name, quiet=0):
-    '''Creates the default skin directories.'''
-    app = ZopeTestCase.app()
-    _setupCMFSkins(app, id, quiet)
-    ZopeTestCase.close(app)
+def _setupCMFSite(app, portal_name=portal_name, quiet=0):
+    '''Creates a CMF site.'''
+    if not hasattr(aq_base(app), portal_name):
+        _optimize()
+        start = time.time()
+        if not quiet: ZopeTestCase._print('Adding CMF Site ... ')
+        # Add user and log in
+        app.acl_users._doAddUser(portal_owner, '', ['Manager'], [])
+        user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
+        newSecurityManager(None, user)
+        # Add CMF site
+        factory = app.manage_addProduct['CMFDefault']
+        factory.manage_addCMFSite(portal_name, '', create_userfolder=1)
+        # Log out and commit
+        noSecurityManager()
+        get_transaction().commit()
+        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-start,))
 
 
 def _optimize():
@@ -94,49 +105,9 @@ def _optimize():
         p.manage_addPortalFolder('Members')
     from Products.CMFDefault.Portal import PortalGenerator
     PortalGenerator.setupMembersFolder = setupMembersFolder
-    # Don't setup default skins
-    def setupDefaultSkins(self, p):
-        pass
-    PortalGenerator.setupDefaultSkins = setupDefaultSkins
 
 
-def _setupCMFSite(app, id=portal_name, quiet=0):
-    '''Creates a CMF site.'''
-    if not hasattr(aq_base(app), id):
-        _optimize()
-        start = time.time()
-        if not quiet: ZopeTestCase._print('Adding CMF Site ... ')
-        # Add user and log in
-        app.acl_users._doAddUser(portal_owner, '', ['Manager'], [])
-        user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
-        newSecurityManager(None, user)
-        # Add CMF site
-        factory = app.manage_addProduct['CMFDefault']
-        factory.manage_addCMFSite(id, '', create_userfolder=1)
-        # Log out and commit
-        noSecurityManager()
-        get_transaction().commit()
-        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-start,))
-
-
-# Save away before _optimize patches over it
-from Products.CMFDefault.Portal import PortalGenerator as _PortalGenerator
-_setupDefaultSkins = _PortalGenerator.setupDefaultSkins
-
-
-def _setupCMFSkins(app, id=portal_name, quiet=0):
-    '''Creates the default skin directories.'''
-    portal = app[id]
-    if not hasattr(aq_base(portal.portal_skins), 'zpt_content'):
-        start = time.time()
-        if not quiet: ZopeTestCase._print('Adding CMF Skins ... ')
-        # Log in
-        user = app.acl_users.getUserById(portal_owner).__of__(app.acl_users)
-        newSecurityManager(None, user)
-        # Add CMF skins
-        _setupDefaultSkins(_PortalGenerator(), portal)
-        # Log out and commit
-        noSecurityManager()
-        get_transaction().commit()
-        if not quiet: ZopeTestCase._print('done (%.3fs)\n' % (time.time()-start,))
+# b/w compatibility names
+def setupCMFSkins(id='', quiet=0): 
+    pass
 
