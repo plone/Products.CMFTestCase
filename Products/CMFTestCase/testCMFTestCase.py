@@ -7,7 +7,6 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Products.CMFTestCase import CMFTestCase
-from Acquisition import aq_base
 
 CMFTestCase.setupCMFSite()
 default_user = CMFTestCase.default_user
@@ -23,7 +22,7 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
     def testDefaultMemberarea(self):
         self.assertEqual(self.folder.getOwner().getId(), default_user)
         self.assertEqual(self.folder.get_local_roles_for_userid(default_user), ('Owner',))
-        self.failIf(hasattr(aq_base(self.folder), 'index_html'))
+        self.failIf('index_html' in self.folder.objectIds())
 
     def testCreateMemberarea(self):
         self.membership.addMember('user2', 'secret', [], [])
@@ -32,11 +31,11 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
         self.assertEqual(home.getOwner().getId(), 'user2')
         self.assertEqual(home.get_local_roles_for_userid('user2'), ('Owner',))
         self.assertEqual(home.get_local_roles_for_userid(default_user), ())
-        self.failIf(hasattr(aq_base(home), 'index_html'))
+        self.failIf('index_html' in home.objectIds())
 
     def testAddDocument(self):
         self.folder.invokeFactory('Document', id='doc')
-        self.failUnless(hasattr(aq_base(self.folder), 'doc'))
+        self.failUnless('doc' in self.folder.objectIds())
 
     def testEditDocument(self):
         self.folder.invokeFactory('Document', id='doc')
