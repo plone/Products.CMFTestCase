@@ -27,7 +27,7 @@ class TestDocument(CMFTestCase.CMFTestCase):
     def testEditDocument(self):
         self.folder.doc.edit(text_format='plain', text='data')
         self.assertEqual(self.folder.doc.EditableBody(), 'data')
-        
+
     def testReindexDocument(self):
         self.failIf(self.catalog(id='doc', Title='Foo'))
         self.folder.doc.setTitle('Foo')

@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.16 2004/09/14 18:49:29 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.17 2004/12/26 21:50:27 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -14,6 +14,7 @@ from setup import portal_name
 from setup import portal_owner
 from setup import default_products
 from setup import default_user
+from setup import default_password
 from setup import setupCMFSite
 
 from AccessControl.SecurityManagement import newSecurityManager
@@ -37,7 +38,7 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
 
     def createMemberarea(self, member_id):
         '''Creates a minimal memberarea.'''
-        # Owner 
+        # Owner
         uf = self.portal.acl_users
         user = uf.getUserById(member_id)
         if user is None:
@@ -54,12 +55,12 @@ class CMFTestCase(ZopeTestCase.PortalTestCase):
         folder.manage_setLocalRoles(member_id, ['Owner'])
 
     def loginAsPortalOwner(self):
-        '''Use if you need to manipulate the portal itself.'''
+        '''Use this when you need to manipulate the portal itself.'''
         uf = self.app.acl_users
         user = uf.getUserById(portal_owner).__of__(uf)
         newSecurityManager(None, user)
 
 
 class FunctionalTestCase(ZopeTestCase.Functional, CMFTestCase):
-    '''Convenience class for functional unit testing'''
+    '''Base class for functional CMF tests'''
 

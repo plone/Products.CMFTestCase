@@ -2,7 +2,7 @@
 # CMFTestCase setup
 #
 
-# $Id: setup.py,v 1.2 2004/09/14 18:49:30 shh42 Exp $
+# $Id: setup.py,v 1.3 2004/12/26 21:50:27 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -20,6 +20,7 @@ portal_name = 'cmf'
 portal_owner = 'portal_owner'
 default_products = ()
 default_user = ZopeTestCase.user_name
+default_password = ZopeTestCase.user_password
 
 
 def setupCMFSite(id=portal_name, products=default_products, quiet=0):
@@ -38,7 +39,7 @@ class PortalSetup:
     def run(self):
         self.app = ZopeTestCase.app()
         try:
-            uf = self.app.acl_users 
+            uf = self.app.acl_users
             if not hasattr(aq_base(self.app), self.id):
                 # Add portal owner and log in
                 uf.userFolderAddUser(portal_owner, 'secret', ['Manager'], [])
@@ -50,11 +51,11 @@ class PortalSetup:
                 # Log in as portal owner
                 user = uf.getUserById(portal_owner).__of__(uf)
                 newSecurityManager(None, user)
-                self._setupProducts() 
+                self._setupProducts()
         finally:
             noSecurityManager()
             ZopeTestCase.close(self.app)
-        
+
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
         start = time.time()

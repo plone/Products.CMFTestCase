@@ -1,7 +1,7 @@
 0.6.0
-- setupCMFSite() now accepts a 'products' argument, allowing to specify
-  a list of products that should be added to the portal by executing their 
-  respective Extensions.Install.install() functions.
+- setupCMFSite() now accepts a 'products' argument which allows to specify
+  a list of products that will be added to the portal by running their
+  Extensions.Install.install() functions.
 - Removed setupCMFSkins() and the ability to setup a CMF site w/o skins.
 - Added a FunctionalTestCase convenience class.
 - Made the ZopeTestCase.utils module available as CMFTestCase.utils.
