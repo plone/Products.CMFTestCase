@@ -7,17 +7,17 @@ CMFTestCase Readme
 
     The CMFTestCase package provides:
 
-        - The method installProduct() to install a Zope product into the 
+        - The function 'installProduct' to install a Zope product into the 
           test environment.
 
-        - The method setupCMFSite() to create a CMF portal in the test db.
+        - The function 'setupCMFSite' to create a CMF portal in the test db.
 
-        - The CMFTestCase base class of which to derive your unit test cases.
+        - The 'CMFTestCase' base class of which to derive your unit test cases.
 
-        - The FunctionalTestCase base class of which to derive your test 
+        - The 'FunctionalTestCase' base class of which to derive your test 
           cases for functional (integration) tests.
 
-        - The utils module known from the ZopeTestCase package.
+        - The 'utils' module known from the ZopeTestCase package.
 
 
     Example CMFTestCase::
