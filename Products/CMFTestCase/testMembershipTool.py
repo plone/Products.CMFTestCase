@@ -21,27 +21,29 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
     def afterSetUp(self):
         self.membership = self.portal.portal_membership
         self.membership.memberareaCreationFlag = 0
-        self.portal.acl_users._doAddUser('user2', 'secret', ['Member'], [])
+        self.membership.addMember('user2', 'secret', ['Member'], [])
 
     def testAddMember(self):
+        self.failUnless(self.portal.acl_users.getUserById('user2'))
+
+    def testAddMemberIfMemberExists(self):
+        # Nothing should happen
         self.membership.addMember('user2', 'secret', ['Member'], [])
         self.failUnless(self.portal.acl_users.getUserById('user2'))
 
-    def testGetMemberByid(self):
+    def testGetMemberById(self):
         user = self.membership.getMemberById(default_user)
         self.failIfEqual(user, None)
         self.assertEqual(user.__class__.__name__, 'MemberData')
         self.assertEqual(user.aq_parent.__class__.__name__, 'User')
 
     def testListMemberIds(self):
-        self.membership.addMember('user2', 'secret', ['Member'], [])
         ids = self.membership.listMemberIds()
         self.assertEqual(len(ids), 2)
         self.failUnless(default_user in ids)
         self.failUnless('user2' in ids)
 
     def testListMembers(self):
-        self.membership.addMember('user2', 'secret', ['Member'], [])
         members = self.membership.listMembers()
         self.assertEqual(len(members), 2)
         self.assertEqual(members[0].__class__.__name__, 'MemberData')
@@ -65,7 +67,7 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
 
     def testSetPassword(self):
         self.membership.setPassword('geheim')
-        member = self.membership.getAuthenticatedMember() 
+        member = self.membership.getMemberById(default_user) 
         self.assertEqual(member.getPassword(), 'geheim')
 
     def testSetPasswordIfAnonymous(self):
