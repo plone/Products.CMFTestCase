@@ -21,3 +21,7 @@ Installation Instructions for CMFTestCase
       
       "C:\Program Files\Zope\bin\python.exe" runalltests.py
 
+    Or, as always, you can use the testrunner to run the tests::
+
+      python /Zope/utilities/testrunner.py -qia
+
