@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.8 2004/02/18 21:49:08 shh42 Exp $
+# $Id: CMFTestCase.py,v 1.9 2004/03/29 10:48:17 shh42 Exp $
 
 from Testing import ZopeTestCase
 
@@ -68,8 +68,7 @@ def setupCMFSite(portal_name=portal_name, quiet=0):
     '''Creates a CMF site.'''
     ZopeTestCase.utils.appcall(_setupCMFSite, portal_name, quiet)
 
-
-def _setupCMFSite(app, portal_name=portal_name, quiet=0):
+def _setupCMFSite(app, portal_name, quiet):
     '''Creates a CMF site.'''
     if not hasattr(aq_base(app), portal_name):
         _optimize()
@@ -107,7 +106,7 @@ def _optimize():
     PortalGenerator.setupMembersFolder = setupMembersFolder
 
 
-# b/w compatibility names
+# b/w compatibility
 def setupCMFSkins(id='', quiet=0): 
     pass
 
