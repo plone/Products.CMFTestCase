@@ -23,5 +23,5 @@ Installation Instructions for CMFTestCase
 
     Or, as always, you can use the testrunner to run the tests::
 
-      python /Zope/utilities/testrunner.py -qia
+      python /path/to/zope/utilities/testrunner.py -qia
 
