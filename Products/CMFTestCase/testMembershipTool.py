@@ -186,12 +186,12 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
         self.assertEqual(self.membership.getHomeUrl('user2'), None)
 
 
+def test_suite():
+    from unittest import TestSuite, makeSuite
+    suite = TestSuite()
+    suite.addTest(makeSuite(TestMembershipTool))
+    return suite
+
 if __name__ == '__main__':
     framework()
-else:
-    def test_suite():
-        from unittest import TestSuite, makeSuite
-        suite = TestSuite()
-        suite.addTest(makeSuite(TestMembershipTool))
-        return suite
 
