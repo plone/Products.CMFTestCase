@@ -2,13 +2,14 @@
 # CMFTestCase setup
 #
 
-# $Id: setup.py,v 1.3 2004/12/26 21:50:27 shh42 Exp $
+# $Id$
 
 from Testing import ZopeTestCase
 
 ZopeTestCase.installProduct('CMFCore')
 ZopeTestCase.installProduct('CMFDefault')
 ZopeTestCase.installProduct('MailHost', quiet=1)
+ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
 
 from PersistentMapping import PersistentMapping
 from AccessControl.SecurityManagement import newSecurityManager
