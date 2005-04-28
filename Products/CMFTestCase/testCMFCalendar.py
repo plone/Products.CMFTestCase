@@ -35,7 +35,7 @@ class TestCalendar(CMFTestCase):
                                   start_date='2005-01-11 08:00',
                                   end_date='2005-01-12 14:00')
 
-        r = self.catalog(start={'query': '2005-01-11', 'range': 'max'})
+        r = self.catalog(start={'query': '2005-01-11 09:00', 'range': 'max'})
 
         self.assert_(r)
         self.assertEqual(r[0].getId, 'lunch')
