@@ -2,7 +2,7 @@
 # CMFTestCase
 #
 
-# $Id: CMFTestCase.py,v 1.24 2005/02/25 11:02:20 shh42 Exp $
+# $Id$
 
 from Testing.ZopeTestCase import PortalTestCase
 from Testing.ZopeTestCase import Functional
@@ -33,7 +33,7 @@ class CMFTestCase(PortalTestCase):
     def getPortal(self):
         '''Returns the portal object to the setup code.
 
-           Do not call this method! Use the self.portal
+           DO NOT CALL THIS METHOD! Use the self.portal
            attribute to access the portal object from tests.
         '''
         return self.app[portal_name]
@@ -55,7 +55,9 @@ class CMFTestCase(PortalTestCase):
         folder.manage_setLocalRoles(name, ['Owner'])
 
     def loginAsPortalOwner(self):
-        '''Use this when you need to manipulate the portal itself.'''
+        '''Use this if - AND ONLY IF - you need to manipulate the
+           portal object itself.
+        '''
         uf = self.app.acl_users
         user = uf.getUserById(portal_owner)
         if not hasattr(user, 'aq_base'):
