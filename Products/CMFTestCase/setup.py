@@ -55,7 +55,6 @@ class PortalSetup:
                 self._setupProducts()
         finally:
             noSecurityManager()
-            get_transaction().abort()
             ZopeTestCase.close(self.app)
 
     def _setupCMFSite(self):
@@ -73,6 +72,7 @@ class PortalSetup:
         portal = self.app[self.id]
         if not hasattr(portal, '_installedProducts'):
             portal._installedProducts = PersistentMapping()
+            self._commit()
         for product in self.products:
             if not portal._installedProducts.has_key(product):
                 start = time.time()
