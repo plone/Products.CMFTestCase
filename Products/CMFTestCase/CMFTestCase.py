@@ -4,12 +4,13 @@
 
 # $Id$
 
-from Testing.ZopeTestCase import PortalTestCase
-from Testing.ZopeTestCase import Functional
-
 from Testing.ZopeTestCase import hasProduct
 from Testing.ZopeTestCase import installProduct
 from Testing.ZopeTestCase import utils
+
+from Testing.ZopeTestCase import Sandboxed
+from Testing.ZopeTestCase import Functional
+from Testing.ZopeTestCase import PortalTestCase
 
 from setup import portal_name
 from setup import portal_owner
@@ -18,25 +19,38 @@ from setup import default_user
 from setup import default_password
 from setup import setupCMFSite
 
+from interfaces import ICMFTestCase
 from interfaces import ICMFSecurity
+
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
+from warnings import warn
 
 
 class CMFTestCase(PortalTestCase):
     '''Base test case for CMF testing'''
 
-    __implements__ = (ICMFSecurity,
+    __implements__ = (ICMFTestCase, ICMFSecurity,
                       PortalTestCase.__implements__)
 
-    def getPortal(self):
+    def _portal(self):
+        '''Returns the portal object for a test.'''
+        try:
+            return self.getPortal(1)
+        except TypeError:
+            return self.getPortal()
+
+    def getPortal(self, called_by_framework=0):
         '''Returns the portal object to the setup code.
 
            DO NOT CALL THIS METHOD! Use the self.portal
            attribute to access the portal object from tests.
         '''
-        return self.app[portal_name]
+        if not called_by_framework:
+            warn('Calling getPortal is not allowed, please use the '
+                 'self.portal attribute.', UserWarning, 2)
+        return getattr(self.app, portal_name)
 
     def createMemberarea(self, name):
         '''Creates a minimal memberarea.'''

@@ -1,12 +1,20 @@
-0.6.0
+0.7.0
+- Added an API module, ctc.py.
+- Added an addProduct() method to CMFTestCase that allows to add a product
+  to the portal. This is as alternative to passing a 'products' argument
+  to setupCMFSite().
+- CMFTestCase now uses the version independend 'transaction' module provided
+  by ZopeTestCase >= 0.9.8.
+
+0.6.0 (not released)
 - setupCMFSite() now accepts a 'products' argument which allows to specify
-  a list of products that will be added to the portal by running their
-  Extensions.Install.install() functions.
+  a list of products that will be added to the portal by executing their
+  respective Extensions.Install.install() methods.
 - Removed setupCMFSkins() and the ability to setup a CMF site w/o skins.
 - Made the ZopeTestCase.utils module available as CMFTestCase.utils.
 - Added FunctionalTestCase base class for "functional" CMF tests.
 - Test classes now assert their interfaces.
 
 0.5.0
-- Package for testing CMF-based products and applications. 
+- Package for testing CMF-based products and applications.
 

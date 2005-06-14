@@ -1,5 +1,5 @@
 #
-# CMFTestCase public interface
+# CMFTestCase API
 #
 
 from Testing.ZopeTestCase import hasProduct

@@ -11,11 +11,12 @@ ZopeTestCase.installProduct('CMFDefault')
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
 
-from PersistentMapping import PersistentMapping
+from Globals import PersistentMapping
+from Testing.ZopeTestCase import transaction
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from Acquisition import aq_base
-import time
+from time import time
 
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
@@ -32,40 +33,39 @@ def setupCMFSite(id=portal_name, products=default_products, quiet=0):
 class PortalSetup:
     '''Creates a CMF site and/or installs products into it.'''
 
-    def __init__(self, id=portal_name, products=default_products, quiet=0):
+    def __init__(self, id, products, quiet):
         self.id = id
         self.products = products
         self.quiet = quiet
 
     def run(self):
-        self.app = ZopeTestCase.app()
+        self.app = self._app()
         try:
             uf = self.app.acl_users
             if not hasattr(aq_base(self.app), self.id):
                 # Add portal owner and log in
                 uf.userFolderAddUser(portal_owner, 'secret', ['Manager'], [])
-                user = uf.getUserById(portal_owner).__of__(uf)
-                newSecurityManager(None, user)
+                self._login(uf, portal_owner)
                 self._optimize()
                 self._setupCMFSite()
             if hasattr(aq_base(self.app), self.id):
                 # Log in as portal owner
-                user = uf.getUserById(portal_owner).__of__(uf)
-                newSecurityManager(None, user)
+                self._login(uf, portal_owner)
                 self._setupProducts()
         finally:
-            noSecurityManager()
-            ZopeTestCase.close(self.app)
+            self._abort()
+            self._close()
+            self._logout()
 
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
-        start = time.time()
+        start = time()
         self._print('Adding CMF Site ... ')
         # Add CMF site
         factory = self.app.manage_addProduct['CMFDefault']
         factory.manage_addCMFSite(self.id, create_userfolder=1)
         self._commit()
-        self._print('done (%.3fs)\n' % (time.time()-start,))
+        self._print('done (%.3fs)\n' % (time()-start,))
 
     def _setupProducts(self):
         '''Installs products into the CMF site.'''
@@ -75,21 +75,42 @@ class PortalSetup:
             self._commit()
         for product in self.products:
             if not portal._installedProducts.has_key(product):
-                start = time.time()
+                start = time()
                 self._print('Adding %s ... ' % (product,))
                 exec 'from Products.%s.Extensions.Install import install' % product
                 install(portal)
                 portal._installedProducts[product] = 1
                 self._commit()
-                self._print('done (%.3fs)\n' % (time.time()-start,))
+                self._print('done (%.3fs)\n' % (time()-start,))
 
     def _optimize(self):
         '''Applies optimizations to the PortalGenerator.'''
         _optimize()
 
+    def _app(self):
+        '''Opens a ZODB connection and returns the app object.'''
+        return ZopeTestCase.app()
+
+    def _close(self):
+        '''Closes the ZODB connection.'''
+        ZopeTestCase.close(self.app)
+
+    def _login(self, uf, name):
+        '''Logs in as user 'name' from user folder 'uf'.'''
+        user = uf.getUserById(name).__of__(uf)
+        newSecurityManager(None, user)
+
+    def _logout(self):
+        '''Logs out.'''
+        noSecurityManager()
+
     def _commit(self):
         '''Commits the transaction.'''
-        get_transaction().commit()
+        transaction.commit()
+
+    def _abort(self):
+        '''Aborts the transaction.'''
+        transaction.abort()
 
     def _print(self, msg):
         '''Prints msg to stderr.'''

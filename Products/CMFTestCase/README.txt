@@ -17,16 +17,24 @@ CMFTestCase Readme
           test environment.
 
         - The function 'setupCMFSite' to create a CMF portal in the test db.
-          setupCMFSite accepts an optional 'products' argument, that allows you
-          to specify a list of products that will be installed into the portal
-          by executing their Extensions.Install.install method.
 
-        - The 'CMFTestCase' base class of which to derive your unit test cases.
+          Note: 'setupCMFSite' accepts an optional 'products' argument, which
+          allows you to specify a list of products that will be added to the
+          portal. Product installation is performed via the canonical
+          'Extensions.Install.install' function.
 
-        - The 'FunctionalTestCase' base class of which to derive your test
-          cases for functional (integration) tests.
+        - The class 'CMFTestCase' of which to derive your test cases.
 
-        - The 'utils' module known from the ZopeTestCase package.
+        - The class 'FunctionalTestCase' of which to derive your test cases
+          for functional unit testing.
+
+        - The classes 'Sandboxed' and 'Functional' to mix-in with your own
+          test cases.
+
+        - The constants 'portal_name', 'portal_owner', 'default_products',
+          'default_user', and 'default_password'.
+
+        - The module 'utils' from the ZopeTestCase package.
 
 
     Example CMFTestCase::

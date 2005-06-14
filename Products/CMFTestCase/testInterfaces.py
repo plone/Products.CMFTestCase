@@ -30,6 +30,10 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
         self.failUnless(verifyClass(IPortalTestCase, CMFTestCase.CMFTestCase))
         self.failUnless(verifyObject(IPortalTestCase, self))
 
+    def testICMFTestCase(self):
+        self.failUnless(verifyClass(ICMFTestCase, CMFTestCase.CMFTestCase))
+        self.failUnless(verifyObject(ICMFTestCase, self))
+
     def testICMFSecurity(self):
         self.failUnless(verifyClass(ICMFSecurity, CMFTestCase.CMFTestCase))
         self.failUnless(verifyObject(ICMFSecurity, self))
@@ -53,6 +57,10 @@ class TestFunctionalTestCase(CMFTestCase.FunctionalTestCase):
     def testIPortalTestCase(self):
         self.failUnless(verifyClass(IPortalTestCase, CMFTestCase.FunctionalTestCase))
         self.failUnless(verifyObject(IPortalTestCase, self))
+
+    def testICMFTestCase(self):
+        self.failUnless(verifyClass(ICMFTestCase, CMFTestCase.FunctionalTestCase))
+        self.failUnless(verifyObject(ICMFTestCase, self))
 
     def testICMFSecurity(self):
         self.failUnless(verifyClass(ICMFSecurity, CMFTestCase.FunctionalTestCase))
