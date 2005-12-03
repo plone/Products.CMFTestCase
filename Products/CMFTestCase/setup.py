@@ -43,9 +43,11 @@ class PortalSetup:
         self.app = self._app()
         try:
             uf = self.app.acl_users
-            if not hasattr(aq_base(self.app), self.id):
-                # Add portal owner and log in
+            if uf.getUserById(portal_owner) is None:
+                # Add portal owner
                 uf.userFolderAddUser(portal_owner, 'secret', ['Manager'], [])
+            if not hasattr(aq_base(self.app), self.id):
+                # Log in and create site
                 self._login(uf, portal_owner)
                 self._optimize()
                 self._setupCMFSite()
