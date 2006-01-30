@@ -143,25 +143,54 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
     def testMemberareaCreationFlag(self):
         self.failUnless(self.membership.getMemberareaCreationFlag())
 
-    def testCreateMemberarea(self):
-        members = self.membership.getMembersFolder()
-        self.failIf(hasattr(aq_base(members), 'user2'))
-        self.membership.createMemberarea('user2')
-        self.failUnless(hasattr(aq_base(members), 'user2'))
+    if CMFTestCase.CMF15:
 
-    def testCreateMemberareaIfDisabled(self):
-        # This should work even if the flag is off
-        self.membership.setMemberareaCreationFlag()
-        members = self.membership.getMembersFolder()
-        self.failIf(hasattr(aq_base(members), 'user2'))
-        self.membership.createMemberarea('user2')
-        self.failUnless(hasattr(aq_base(members), 'user2'))
+        def testCreateMemberarea(self):
+            # CMF 1.5 requires user2 to be logged in!
+            self.login('user2')
+            members = self.membership.getMembersFolder()
+            self.failIf(hasattr(aq_base(members), 'user2'))
+            self.membership.createMemberArea('user2')
+            self.failUnless(hasattr(aq_base(members), 'user2'))
 
-    def testWrapUserCreatesMemberarea(self):
-        members = self.membership.getMembersFolder()
-        user = self.portal.acl_users.getUserById('user2')
-        user = self.membership.wrapUser(user)
-        self.failUnless(hasattr(aq_base(members), 'user2'))
+        def testCreateMemberareaIfDisabled(self):
+            # No longer works in CMF 1.5
+            self.membership.setMemberareaCreationFlag() # toggle
+            members = self.membership.getMembersFolder()
+            self.failIf(hasattr(aq_base(members), 'user2'))
+            self.membership.createMemberArea('user2')
+            #self.failUnless(hasattr(aq_base(members), 'user2'))
+            self.failIf(hasattr(aq_base(members), 'user2'))
+
+        def testWrapUserCreatesMemberarea(self):
+            # No longer the case in CMF 1.5
+            members = self.membership.getMembersFolder()
+            user = self.portal.acl_users.getUserById('user2')
+            user = self.membership.wrapUser(user)
+            #self.failUnless(hasattr(aq_base(members), 'user2'))
+            self.failIf(hasattr(aq_base(members), 'user2'))
+
+    else:
+
+        def testCreateMemberarea(self):
+            members = self.membership.getMembersFolder()
+            self.failIf(hasattr(aq_base(members), 'user2'))
+            self.membership.createMemberarea('user2')
+            self.failUnless(hasattr(aq_base(members), 'user2'))
+
+        def testCreateMemberareaIfDisabled(self):
+            # This should work even if the flag is off
+            self.membership.setMemberareaCreationFlag() # toggle
+            members = self.membership.getMembersFolder()
+            self.failIf(hasattr(aq_base(members), 'user2'))
+            self.membership.createMemberarea('user2')
+            self.failUnless(hasattr(aq_base(members), 'user2'))
+
+        def testWrapUserCreatesMemberarea(self):
+            members = self.membership.getMembersFolder()
+            user = self.portal.acl_users.getUserById('user2')
+            user = self.membership.wrapUser(user)
+            self.failUnless(hasattr(aq_base(members), 'user2'))
 
     def testWrapUserDoesntCreateMemberarea(self):
         # No member area is created if the flag is off

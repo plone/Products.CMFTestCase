@@ -11,6 +11,7 @@ from Testing.ZopeTestCase import Functional
 from Testing.ZopeTestCase import utils
 from Testing.ZopeTestCase.utils import *
 
+from Products.CMFTestCase.setup import CMF15
 from Products.CMFTestCase.setup import portal_name
 from Products.CMFTestCase.setup import portal_owner
 from Products.CMFTestCase.setup import default_products

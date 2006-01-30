@@ -12,6 +12,13 @@ ZopeTestCase.installProduct('CMFUid', quiet=1)
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
 
+try:
+    from Products.CMFCore import permissions
+except ImportError:
+    CMF15 = 0
+else:
+    CMF15 = 1
+
 from Globals import PersistentMapping
 from Testing.ZopeTestCase import transaction
 from AccessControl.SecurityManagement import newSecurityManager
@@ -64,9 +71,7 @@ class PortalSetup:
         '''Creates the CMF site.'''
         start = time()
         self._print('Adding CMF Site ... ')
-        # Add CMF site
-        factory = self.app.manage_addProduct['CMFDefault']
-        factory.manage_addCMFSite(self.id, create_userfolder=1)
+        self._createCMFSite()
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
 
@@ -119,6 +124,16 @@ class PortalSetup:
         '''Prints msg to stderr.'''
         if not self.quiet:
             ZopeTestCase._print(msg)
+
+    def _createCMFSite(self):
+        '''Creates a CMF site object.'''
+        hook = ZopeTestCase.WarningsHook()
+        hook.install() # Suppress annoying DeprecationWarning
+        try:
+            factory = self.app.manage_addProduct['CMFDefault']
+            factory.manage_addCMFSite(self.id, create_userfolder=1)
+        finally:
+            hook.uninstall()
 
 
 def _optimize():
