@@ -19,6 +19,13 @@ except ImportError:
 else:
     CMF15 = 1
 
+try:
+    from Products.CMFDefault import factory
+except ImportError:
+    CMF16 = 0
+else:
+    CMF16 = 1
+
 from Globals import PersistentMapping
 from Testing.ZopeTestCase import transaction
 from AccessControl.SecurityManagement import newSecurityManager
@@ -130,8 +137,8 @@ class PortalSetup:
         hook = ZopeTestCase.WarningsHook()
         hook.install() # Suppress annoying DeprecationWarning
         try:
-            factory = self.app.manage_addProduct['CMFDefault']
-            factory.manage_addCMFSite(self.id, create_userfolder=1)
+            from Products.CMFDefault.Portal import manage_addCMFSite
+            manage_addCMFSite(self.app, self.id, create_userfolder=1)
         finally:
             hook.uninstall()
 
