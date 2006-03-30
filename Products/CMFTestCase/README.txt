@@ -1,8 +1,8 @@
-CMFTestCase 0.6.0
+CMFTestCase 0.7.0
 (c) 2003-2005, Stefan H. Holek, stefan@epy.co.at
 http://zope.org/Members/shh/CMFTestCase
 License: ZPL
-Zope: 2.6-2.8
+Zope: 2.6-2.9
 
 
 CMFTestCase Readme
@@ -33,6 +33,9 @@ CMFTestCase Readme
 
         - The constants 'portal_name', 'portal_owner', 'default_products',
           'default_user', and 'default_password'.
+
+        - The constant 'CMF15' which evaluates to true for CMF versions
+          >= 1.5.
 
         - The module 'utils' from the ZopeTestCase package.
 

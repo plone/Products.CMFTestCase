@@ -2,6 +2,8 @@
 # CMFTestCase API
 #
 
+# $Id:$
+
 from Testing.ZopeTestCase import hasProduct
 from Testing.ZopeTestCase import installProduct
 

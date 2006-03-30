@@ -59,7 +59,7 @@ class PortalSetup:
             uf = self.app.acl_users
             if uf.getUserById(portal_owner) is None:
                 # Add portal owner
-                uf.userFolderAddUser(portal_owner, 'secret', ['Manager'], [])
+                uf.userFolderAddUser(portal_owner, default_password, ['Manager'], [])
             if not hasattr(aq_base(self.app), self.id):
                 # Log in and create site
                 self._login(uf, portal_owner)
