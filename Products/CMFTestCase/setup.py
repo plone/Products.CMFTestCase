@@ -25,6 +25,16 @@ except ImportError:
     CMF16 = 0
 else:
     CMF16 = 1
+    ZopeTestCase.installProduct('DCWorkflow')
+    # This is bad and should be replaced with a proper CA setup
+    ZopeTestCase.installProduct('Five')
+
+try:
+    from Products.CMFCore import CMFCorePermissions
+except ImportError:
+    CMF20 = 1
+else:
+    CMF20 = 0
 
 from Globals import PersistentMapping
 from Testing.ZopeTestCase import transaction
@@ -35,21 +45,29 @@ from time import time
 
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
+if CMF20:
+    default_policy = 'Products.CMFDefault:default'
+else:
+    default_policy = 'CMFDefault:default'
 default_products = ()
+default_extension_profiles = []
 default_user = ZopeTestCase.user_name
 default_password = ZopeTestCase.user_password
 
 
-def setupCMFSite(id=portal_name, products=default_products, quiet=0):
+def setupCMFSite(id=portal_name, policy=default_policy, products=default_products,
+                 quiet=0, extension_profiles=default_extension_profiles):
     '''Creates a CMF site and/or installs products into it.'''
-    PortalSetup(id, products, quiet).run()
+    PortalSetup(id, policy, products, quiet, extension_profiles).run()
 
 
 class PortalSetup:
     '''Creates a CMF site and/or installs products into it.'''
 
-    def __init__(self, id, products, quiet):
+    def __init__(self, id, policy, products, quiet, extension_profiles):
         self.id = id
+        self.policy = policy
+        self.extension_profiles = extension_profiles
         self.products = products
         self.quiet = quiet
 
@@ -77,8 +95,22 @@ class PortalSetup:
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
         start = time()
-        self._print('Adding CMF Site ... ')
-        self._createCMFSite()
+        if self.policy == default_policy:
+            self._print('Adding CMF Site ... ')
+        else:
+            self._print('Adding CMF Site (%s) ... ' % self.policy)
+        if not self.extension_profiles == default_extension_profiles:
+            self._print('Applied extensions profiles %s' %
+                        ', '.join(self.extension_profiles))
+        # Add CMF site
+        # Starting with CMF 1.6 site creation is based on GenericSetup
+        if CMF16:
+            factory.addConfiguredSite(self.app, self.id, self.policy,
+                                      extension_ids=tuple(self.extension_profiles))
+        else:
+            # Prior to CMF 1.6 site creation was based on PortalGenerator
+            from Products.CMFDefault.Portal import manage_addCMFSite
+            manage_addCMFSite(self.app, self.id, create_userfolder=1)
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
 
@@ -132,16 +164,6 @@ class PortalSetup:
         if not self.quiet:
             ZopeTestCase._print(msg)
 
-    def _createCMFSite(self):
-        '''Creates a CMF site object.'''
-        hook = ZopeTestCase.WarningsHook()
-        hook.install() # Suppress annoying DeprecationWarning
-        try:
-            from Products.CMFDefault.Portal import manage_addCMFSite
-            manage_addCMFSite(self.app, self.id, create_userfolder=1)
-        finally:
-            hook.uninstall()
-
 
 def _optimize():
     '''Reduces portal creation time.'''
@@ -155,9 +177,12 @@ def _optimize():
         return list(self._actions)
     from Products.CMFCore.ActionProviderBase import ActionProviderBase
     ActionProviderBase._cloneActions = _cloneActions
-    # Don't setup 'index_html' in Members folder
-    def setupMembersFolder(self, p):
-        p.manage_addPortalFolder('Members')
-    from Products.CMFDefault.Portal import PortalGenerator
-    PortalGenerator.setupMembersFolder = setupMembersFolder
+    # The site creation code is not needed anymore in CMF >= 1.6
+    # as it is now based on GenericSetup
+    if not CMF16:
+        # Don't setup 'index_html' in Members folder
+        def setupMembersFolder(self, p):
+            p.manage_addPortalFolder('Members')
+        from Products.CMFDefault.Portal import PortalGenerator
+        PortalGenerator.setupMembersFolder = setupMembersFolder
 

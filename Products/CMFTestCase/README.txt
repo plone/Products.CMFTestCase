@@ -1,8 +1,8 @@
-CMFTestCase 0.7.0
-(c) 2003-2005, Stefan H. Holek, stefan@epy.co.at
+CMFTestCase 0.8.0
+(c) 2003-2006, Stefan H. Holek, stefan@epy.co.at
 http://zope.org/Members/shh/CMFTestCase
 License: ZPL
-Zope: 2.6-2.9
+Zope: 2.6-2.10
 
 
 CMFTestCase Readme
@@ -31,11 +31,18 @@ CMFTestCase Readme
         - The classes 'Sandboxed' and 'Functional' to mix-in with your own
           test cases.
 
-        - The constants 'portal_name', 'portal_owner', 'default_products',
-          'default_user', and 'default_password'.
+        - The constants 'portal_name', 'portal_owner', 'default_policy',
+          'default_products', 'default_extension_profiles', 'default_user'
+          and 'default_password'.
 
         - The constant 'CMF15' which evaluates to true for CMF versions
           >= 1.5.
+
+        - The constant 'CMF16' which evaluates to true for CMF versions
+          >= 1.6.
+
+        - The constant 'CMF20' which evaluates to true for CMF versions
+          >= 2.0.
 
         - The module 'utils' from the ZopeTestCase package.
 

@@ -6,13 +6,22 @@ import os, sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from Products.CMFTestCase.ctc import *
+# Right now we need to have CMFCalendar installed before we call CMFTestCase,
+# as otherwise the installProduct('Five') call inside there won't take the
+# CMFCalendar configure.zcml file into account and as a result the extension
+# profile won't be registered
+from Testing import ZopeTestCase
+ZopeTestCase.installProduct('CMFCalendar')
+from Products.CMFTestCase import CMFTestCase
 
-installProduct('CMFCalendar')
-setupCMFSite(products=('CMFCalendar',))
+if CMFTestCase.CMF20:
+    CMFTestCase.setupCMFSite(extension_profiles=['Products.CMFCalendar:default'])
+elif CMFTestCase.CMF16:
+    CMFTestCase.setupCMFSite(extension_profiles=['CMFCalendar:default'])
+else:
+    CMFTestCase.setupCMFSite(products=('CMFCalendar',))
 
-
-class TestCalendar(CMFTestCase):
+class TestCalendar(CMFTestCase.CMFTestCase):
 
     def afterSetUp(self):
         self.catalog = self.portal.portal_catalog

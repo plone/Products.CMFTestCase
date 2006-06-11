@@ -13,9 +13,13 @@ from Testing.ZopeTestCase import Functional
 from Testing.ZopeTestCase import PortalTestCase
 
 from setup import CMF15
+from setup import CMF16
+from setup import CMF20
 from setup import portal_name
 from setup import portal_owner
+from setup import default_policy
 from setup import default_products
+from setup import default_extension_profiles
 from setup import default_user
 from setup import default_password
 from setup import setupCMFSite

@@ -1,3 +1,10 @@
+0.8.2
+- Added support for passing a list of GenericSetup extension profiles
+  to the setupCMFSite method.
+
+0.8.0
+- Updated to new portal creation process of CMF1.6.
+
 0.7.0
 - Updated to CMF 1.5.
 - Added an API module, ctc.py.
