@@ -1,7 +1,4 @@
 0.8.2
-- Introduced a new ICMFTestSiteRoot interface that the CMF Site object
-  provides during test runs (starting with CMF 1.6). This can be used to
-  register extension profiles only during test runs.
 - Added support for passing a list of GenericSetup extension profiles
   to the setupCMFSite method.
 

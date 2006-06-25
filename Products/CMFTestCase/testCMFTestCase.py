@@ -7,11 +7,6 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Products.CMFTestCase import CMFTestCase
-from Products.CMFTestCase.setup import CMF16
-
-if CMF16:
-    from Products.CMFTestCase.interfaces import ICMFTestSiteRoot
-
 
 CMFTestCase.setupCMFSite()
 default_user = CMFTestCase.default_user
@@ -58,10 +53,6 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
     def testSkinScript(self):
         self.folder.invokeFactory('Document', id='doc', title='Foo')
         self.assertEqual(self.folder.doc.TitleOrId(), 'Foo')
-
-    if CMF16:
-        def testTestSiteRootInterface(self):
-            self.failUnless(ICMFTestSiteRoot.providedBy(self.portal))
 
 
 def test_suite():

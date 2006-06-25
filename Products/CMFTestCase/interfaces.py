@@ -6,6 +6,7 @@
 
 from Testing.ZopeTestCase.interfaces import *
 
+
 class ICMFSecurity(IPortalSecurity):
 
     def loginAsPortalOwner():
@@ -24,12 +25,3 @@ class ICMFTestCase(IPortalTestCase):
            argument to 'setupCMFSite'.
         '''
 
-try:
-    from Products.CMFCore.interfaces import ISiteRoot
-except ImportError:
-    pass
-else:
-    class ICMFTestSiteRoot(ISiteRoot):
-        """Marker interface for the object which serves as the root of a site.
-           This will automatically and should only be provided during tests runs.
-        """
