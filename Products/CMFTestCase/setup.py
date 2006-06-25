@@ -100,13 +100,20 @@ class PortalSetup:
         else:
             self._print('Adding CMF Site (%s) ... ' % self.policy)
         if not self.extension_profiles == default_extension_profiles:
-            self._print('Applied extensions profiles %s' %
+            self._print('Applied extensions profiles %s ' %
                         ', '.join(self.extension_profiles))
         # Add CMF site
         # Starting with CMF 1.6 site creation is based on GenericSetup
         if CMF16:
             factory.addConfiguredSite(self.app, self.id, self.policy,
                                       extension_ids=tuple(self.extension_profiles))
+            # In test runs we let the CMF Site also provide a ICMFTestSiteRoot
+            # interface, which can for example be used to register extension
+            # profiles with dummy test content types
+            from zope.interface import alsoProvides
+            from Products.CMFTestCase.interfaces import ICMFTestSiteRoot
+            portal = self.app[self.id]
+            alsoProvides(portal, ICMFTestSiteRoot)
         else:
             # Prior to CMF 1.6 site creation was based on PortalGenerator
             from Products.CMFDefault.Portal import manage_addCMFSite
