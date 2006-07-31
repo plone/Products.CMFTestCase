@@ -99,9 +99,6 @@ class PortalSetup:
             self._print('Adding CMF Site ... ')
         else:
             self._print('Adding CMF Site (%s) ... ' % self.policy)
-        if not self.extension_profiles == default_extension_profiles:
-            self._print('Applied extensions profiles %s' %
-                        ', '.join(self.extension_profiles))
         # Add CMF site
         # Starting with CMF 1.6 site creation is based on GenericSetup
         if CMF16:
@@ -113,6 +110,10 @@ class PortalSetup:
             manage_addCMFSite(self.app, self.id, create_userfolder=1)
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
+
+        if CMF16 and self.extension_profiles != default_extension_profiles:
+            self._print('  (Applied extensions profiles: %s)\n' %
+                        ', '.join(self.extension_profiles))
 
     def _setupProducts(self):
         '''Installs products into the CMF site.'''
