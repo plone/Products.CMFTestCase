@@ -12,14 +12,16 @@ if __name__ == '__main__':
 # profile won't be registered
 from Testing import ZopeTestCase
 ZopeTestCase.installProduct('CMFCalendar')
+
 from Products.CMFTestCase import CMFTestCase
 
 if CMFTestCase.CMF20:
-    CMFTestCase.setupCMFSite(extension_profiles=['Products.CMFCalendar:default'])
+    CMFTestCase.setupCMFSite(extension_profiles=('Products.CMFCalendar:default',))
 elif CMFTestCase.CMF16:
-    CMFTestCase.setupCMFSite(extension_profiles=['CMFCalendar:default'])
+    CMFTestCase.setupCMFSite(extension_profiles=('CMFCalendar:default',))
 else:
     CMFTestCase.setupCMFSite(products=('CMFCalendar',))
+
 
 class TestCalendar(CMFTestCase.CMFTestCase):
 
