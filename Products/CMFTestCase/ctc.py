@@ -18,8 +18,8 @@ from Products.CMFTestCase.setup import CMF16
 from Products.CMFTestCase.setup import CMF20
 from Products.CMFTestCase.setup import portal_name
 from Products.CMFTestCase.setup import portal_owner
-from Products.CMFTestCase.setup import default_policy
 from Products.CMFTestCase.setup import default_products
+from Products.CMFTestCase.setup import default_base_profile
 from Products.CMFTestCase.setup import default_extension_profiles
 from Products.CMFTestCase.setup import default_user
 from Products.CMFTestCase.setup import default_password

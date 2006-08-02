@@ -30,11 +30,11 @@ else:
     ZopeTestCase.installProduct('Five')
 
 try:
-    from Products.CMFCore import CMFCorePermissions
+    from Products.CMFDefault.utils import translate
 except ImportError:
-    CMF20 = 1
-else:
     CMF20 = 0
+else:
+    CMF20 = 1
 
 from Globals import PersistentMapping
 from Testing.ZopeTestCase import transaction
@@ -45,31 +45,33 @@ from time import time
 
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
-if CMF20:
-    default_policy = 'Products.CMFDefault:default'
-else:
-    default_policy = 'CMFDefault:default'
 default_products = ()
-default_extension_profiles = []
 default_user = ZopeTestCase.user_name
 default_password = ZopeTestCase.user_password
+# CMF 1.6
+default_base_profile = 'CMFDefault:default'
+default_extension_profiles = ()
+
+if CMF20:
+    default_base_profile = 'Products.CMFDefault:default'
 
 
-def setupCMFSite(id=portal_name, policy=default_policy, products=default_products,
-                 quiet=0, extension_profiles=default_extension_profiles):
+def setupCMFSite(id=portal_name, products=default_products, quiet=0,
+                 base_profile=default_base_profile,
+                 extension_profiles=default_extension_profiles):
     '''Creates a CMF site and/or installs products into it.'''
-    PortalSetup(id, policy, products, quiet, extension_profiles).run()
+    PortalSetup(id, products, quiet, base_profile, extension_profiles).run()
 
 
 class PortalSetup:
     '''Creates a CMF site and/or installs products into it.'''
 
-    def __init__(self, id, policy, products, quiet, extension_profiles):
+    def __init__(self, id, products, quiet, base_profile, extension_profiles):
         self.id = id
-        self.policy = policy
-        self.extension_profiles = extension_profiles
         self.products = products
         self.quiet = quiet
+        self.base_profile = base_profile
+        self.extension_profiles = tuple(extension_profiles)
 
     def run(self):
         self.app = self._app()
@@ -94,26 +96,38 @@ class PortalSetup:
 
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
-        start = time()
-        if self.policy == default_policy:
-            self._print('Adding CMF Site ... ')
-        else:
-            self._print('Adding CMF Site (%s) ... ' % self.policy)
-        # Add CMF site
         # Starting with CMF 1.6 site creation is based on GenericSetup
         if CMF16:
-            factory.addConfiguredSite(self.app, self.id, self.policy,
-                                      extension_ids=tuple(self.extension_profiles))
+            self._setupCMFSite_genericsetup()
         else:
-            # Prior to CMF 1.6 site creation was based on PortalGenerator
-            from Products.CMFDefault.Portal import manage_addCMFSite
-            manage_addCMFSite(self.app, self.id, create_userfolder=1)
+            self._setupCMFSite_portalgenerator()
+
+    def _setupCMFSite_genericsetup(self):
+        '''Creates a CMF site with GenericSetup.'''
+        start = time()
+        if self.base_profile != default_base_profile:
+            self._print('Adding CMF Site (%s) ... ' % self.base_profile)
+        else:
+            self._print('Adding CMF Site ... ')
+        # Add CMF site
+        factory.addConfiguredSite(self.app, self.id,
+                                  profile_id=self.base_profile,
+                                  extension_ids=self.extension_profiles)
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
-
+        # Report applied expension profiles
         if CMF16 and self.extension_profiles != default_extension_profiles:
             self._print('  (Applied extensions profiles: %s)\n' %
                         ', '.join(self.extension_profiles))
+
+    def _setupCMFSite_portalgenerator(self):
+        '''Creates a CMF site with PortalGenerator.'''
+        start = time()
+        self._print('Adding CMF Site ... ')
+        from Products.CMFDefault.Portal import manage_addCMFSite
+        manage_addCMFSite(self.app, self.id, create_userfolder=1)
+        self._commit()
+        self._print('done (%.3fs)\n' % (time()-start,))
 
     def _setupProducts(self):
         '''Installs products into the CMF site.'''

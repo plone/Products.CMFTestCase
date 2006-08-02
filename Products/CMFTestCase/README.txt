@@ -1,6 +1,6 @@
-CMFTestCase 0.8.0
+CMFTestCase 0.8.4
 (c) 2003-2006, Stefan H. Holek, stefan@epy.co.at
-http://zope.org/Members/shh/CMFTestCase
+http://plone.org/products/cmftestcase
 License: ZPL
 Zope: 2.6-2.10
 
@@ -31,9 +31,9 @@ CMFTestCase Readme
         - The classes 'Sandboxed' and 'Functional' to mix-in with your own
           test cases.
 
-        - The constants 'portal_name', 'portal_owner', 'default_policy',
-          'default_products', 'default_extension_profiles', 'default_user'
-          and 'default_password'.
+        - The constants 'portal_name', 'portal_owner', 'default_products',
+          'default_base_profile', 'default_extension_profiles',
+          'default_user', and 'default_password'.
 
         - The constant 'CMF15' which evaluates to true for CMF versions
           >= 1.5.
@@ -52,7 +52,7 @@ CMFTestCase Readme
         from Products.CMFTestCase import CMFTestCase
 
         CMFTestCase.installProduct('SomeProduct')
-        CMFTestCase.setupCMFSite()
+        CMFTestCase.setupCMFSite(products=('SomeProduct',))
 
         class TestSomething(CMFTestCase.CMFTestCase):
 
@@ -62,6 +62,14 @@ CMFTestCase Readme
             def testEditDocument(self):
                 self.folder.doc.edit(text_format='plain', text='data')
                 self.assertEqual(self.folder.doc.EditableBody(), 'data')
+
+
+    Example CMFTestCase setup with GenericSetup::
+
+        from Products.CMFTestCase import CMFTestCase
+
+        CMFTestCase.installProduct('SomeProduct')
+        CMFTestCase.setupCMFSite(extension_profiles=('SomeProduct:default',))
 
 
     Please see the docs of the ZopeTestCase package, especially those
