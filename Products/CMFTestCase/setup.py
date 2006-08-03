@@ -110,13 +110,13 @@ class PortalSetup:
         else:
             self._print('Adding CMF Site ... ')
         # Add CMF site
-        factory.addConfiguredSite(self.app, self.id,
+        factory.addConfiguredSite(self.app, self.id, snapshot=False,
                                   profile_id=self.base_profile,
                                   extension_ids=self.extension_profiles)
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
         # Report applied expension profiles
-        if CMF16 and self.extension_profiles != default_extension_profiles:
+        if self.extension_profiles != default_extension_profiles:
             self._print('  (Applied extensions profiles: %s)\n' %
                         ', '.join(self.extension_profiles))
 
