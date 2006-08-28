@@ -32,12 +32,16 @@ from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from warnings import warn
 
+import setup, layer
 
 class CMFTestCase(PortalTestCase):
     '''Base test case for CMF testing'''
 
     __implements__ = (ICMFTestCase, ICMFSecurity,
                       PortalTestCase.__implements__)
+
+    if setup.USELAYER:
+        layer = layer.ZCMLLayer
 
     def _portal(self):
         '''Returns the portal object for a test.'''
