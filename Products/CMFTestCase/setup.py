@@ -128,7 +128,7 @@ class PortalSetup:
         self._print('done (%.3fs)\n' % (time()-start,))
         # Report applied expension profiles
         if self.extension_profiles != default_extension_profiles:
-            self._print('  (Applied extensions profiles: %s)\n' %
+            self._print('  Applied extensions profiles: %s\n' %
                         ', '.join(self.extension_profiles))
 
     def _setupCMFSite_portalgenerator(self):
