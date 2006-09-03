@@ -34,6 +34,7 @@ from warnings import warn
 
 import setup, layer
 
+
 class CMFTestCase(PortalTestCase):
     '''Base test case for CMF testing'''
 
