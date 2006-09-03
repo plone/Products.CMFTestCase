@@ -9,6 +9,7 @@ if __name__ == '__main__':
 from Products.CMFTestCase import CMFTestCase
 from Acquisition import aq_base
 from AccessControl.User import nobody
+from AccessControl.AuthEncoding import pw_validate
 
 CMFTestCase.setupCMFSite()
 default_user = CMFTestCase.default_user
@@ -68,7 +69,9 @@ class TestMembershipTool(CMFTestCase.CMFTestCase):
     def testSetPassword(self):
         self.membership.setPassword('geheim')
         member = self.membership.getMemberById(default_user)
-        self.assertEqual(member.getPassword(), 'geheim')
+        auth = self.membership.getAuthenticatedMember()
+        self.failUnless(pw_validate(member.getPassword(), 'geheim'))
+        self.failUnless(pw_validate(auth.getPassword(), 'geheim'))
 
     def testSetPasswordIfAnonymous(self):
         self.logout()
