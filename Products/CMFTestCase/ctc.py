@@ -10,8 +10,8 @@ from Testing.ZopeTestCase import installProduct
 from Testing.ZopeTestCase import Sandboxed
 from Testing.ZopeTestCase import Functional
 
-from Testing.ZopeTestCase import utils
-from Testing.ZopeTestCase.utils import *
+from Products.CMFTestCase import utils
+from Products.CMFTestCase.utils import *
 
 from Products.CMFTestCase.setup import CMF15
 from Products.CMFTestCase.setup import CMF16

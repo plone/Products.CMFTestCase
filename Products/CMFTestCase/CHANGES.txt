@@ -1,5 +1,7 @@
 0.8.4
 - Allow to pass a base profile to the setupCMFSite function.
+- Added a ZCMLLayer to support recent Zopes and zope.testing.testrunner.
+  Thanks to Whit Morris.
 
 0.8.2
 - Added support for passing a list of GenericSetup extension profiles

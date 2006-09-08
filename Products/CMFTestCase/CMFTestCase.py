@@ -6,7 +6,6 @@
 
 from Testing.ZopeTestCase import hasProduct
 from Testing.ZopeTestCase import installProduct
-from Testing.ZopeTestCase import utils
 
 from Testing.ZopeTestCase import Sandboxed
 from Testing.ZopeTestCase import Functional
@@ -32,7 +31,8 @@ from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from warnings import warn
 
-import setup, layer
+import setup
+import utils
 
 
 class CMFTestCase(PortalTestCase):
@@ -42,6 +42,7 @@ class CMFTestCase(PortalTestCase):
                       PortalTestCase.__implements__)
 
     if setup.USELAYER:
+        import layer
         layer = layer.ZCMLLayer
 
     def _portal(self):

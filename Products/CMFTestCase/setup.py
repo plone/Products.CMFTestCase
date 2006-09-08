@@ -12,12 +12,12 @@ ZopeTestCase.installProduct('CMFUid', quiet=1)
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
 
-USELAYER=False
 try:
     import zope.testing.testrunner
-    USELAYER=True
 except ImportError:
-    pass
+    USELAYER = 0
+else:
+    USELAYER = 1
 
 try:
     from Products.CMFCore import permissions
@@ -33,7 +33,7 @@ except ImportError:
 else:
     CMF16 = 1
     ZopeTestCase.installProduct('DCWorkflow')
-    # This is bad and should be replaced with a proper CA setup
+    # For BBB
     if not USELAYER:
         ZopeTestCase.installProduct('Five')
 
@@ -56,6 +56,7 @@ portal_owner = 'portal_owner'
 default_products = ()
 default_user = ZopeTestCase.user_name
 default_password = ZopeTestCase.user_password
+
 # CMF 1.6
 default_base_profile = 'CMFDefault:default'
 default_extension_profiles = ()
@@ -73,6 +74,7 @@ def setupCMFSite(id=portal_name, products=default_products, quiet=0,
 if USELAYER:
     import utils
     setupCMFSite = utils.safe_load_site_wrapper(setupCMFSite)
+
 
 class PortalSetup:
     '''Creates a CMF site and/or installs products into it.'''
@@ -121,7 +123,7 @@ class PortalSetup:
         else:
             self._print('Adding CMF Site ... ')
         # Add CMF site
-        factory.addConfiguredSite(self.app, self.id, snapshot=False,
+        factory.addConfiguredSite(self.app, self.id, snapshot=0,
                                   profile_id=self.base_profile,
                                   extension_ids=self.extension_profiles)
         self._commit()
