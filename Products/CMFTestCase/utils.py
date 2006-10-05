@@ -16,7 +16,7 @@ except ImportError:
         def _cleanUp(): pass
 
 
-def cleanUp(self):
+def cleanUp():
     """Clean up component architecture"""
     _cleanUp()
     import Products.Five.zcml as zcml
