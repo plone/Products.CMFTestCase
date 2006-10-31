@@ -1,4 +1,4 @@
-CMFTestCase 0.8.4
+CMFTestCase 0.8.6
 (c) 2003-2006, Stefan H. Holek, stefan@epy.co.at
 http://plone.org/products/cmftestcase
 License: ZPL
@@ -44,7 +44,8 @@ CMFTestCase Readme
         - The constant 'CMF20' which evaluates to true for CMF versions
           >= 2.0.
 
-        - The module 'utils' from the ZopeTestCase package.
+        - The module 'utils' which contains all utils from the ZopeTestCase
+          package as well as additional functions for layer support.
 
 
     Example CMFTestCase::
