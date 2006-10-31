@@ -1,3 +1,6 @@
+0.8.6
+- Made sure layer cleanup resets Five.zcml to "not initialized".
+
 0.8.4
 - Allow to pass a base profile to the setupCMFSite function.
 - Added a ZCMLLayer to support recent Zopes and zope.testing.testrunner.
