@@ -1,3 +1,7 @@
+Unreleased
+- Added CMF21 constant.
+- Prepared for switching ZopeTestCase to Zope3 interfaces.
+
 0.8.6
 - Made sure layer cleanup resets Five.zcml to "not initialized".
 
