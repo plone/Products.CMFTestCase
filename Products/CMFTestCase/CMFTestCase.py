@@ -39,8 +39,12 @@ import utils
 class CMFTestCase(PortalTestCase):
     '''Base test case for CMF testing'''
 
-    __implements__ = (ICMFTestCase, ICMFSecurity,
-                      PortalTestCase.__implements__)
+    if setup.Z3INTERFACES:
+        from zope.interface import implements
+        implements(ICMFTestCase, ICMFSecurity)
+    else:
+        __implements__ = (ICMFTestCase, ICMFSecurity,
+                          PortalTestCase.__implements__)
 
     if setup.USELAYER:
         import layer
@@ -107,6 +111,7 @@ class CMFTestCase(PortalTestCase):
 class FunctionalTestCase(Functional, CMFTestCase):
     '''Base class for functional CMF tests'''
 
-    __implements__ = (Functional.__implements__,
-                      CMFTestCase.__implements__)
+    if not setup.Z3INTERFACES:
+        __implements__ = (Functional.__implements__,
+                          CMFTestCase.__implements__)
 

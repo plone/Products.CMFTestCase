@@ -12,6 +12,15 @@ ZopeTestCase.installProduct('CMFUid', quiet=1)
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
 
+# Check for Zope3 interfaces
+try:
+    from zope.interface.interfaces import IInterface
+except ImportError:
+    Z3INTERFACES = 0
+else:
+    from interfaces import ICMFTestCase
+    Z3INTERFACES = IInterface.providedBy(ICMFTestCase)
+
 # Check for Zope 2.9 or above
 try:
     import zope.testing.testrunner
