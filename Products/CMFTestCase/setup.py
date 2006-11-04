@@ -12,6 +12,7 @@ ZopeTestCase.installProduct('CMFUid', quiet=1)
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
 
+# Check for Zope 2.9 or above
 try:
     import zope.testing.testrunner
 except ImportError:
@@ -19,6 +20,7 @@ except ImportError:
 else:
     USELAYER = 1
 
+# Check for CMF 1.5 or above
 try:
     from Products.CMFCore import permissions
 except ImportError:
@@ -26,6 +28,7 @@ except ImportError:
 else:
     CMF15 = 1
 
+# Check for CMF 1.6 or above
 try:
     from Products.CMFDefault import factory
 except ImportError:
@@ -37,12 +40,21 @@ else:
     if not USELAYER:
         ZopeTestCase.installProduct('Five')
 
+# Check for CMF 2.0 or above
 try:
     from Products.CMFDefault.utils import translate
 except ImportError:
     CMF20 = 0
 else:
     CMF20 = 1
+
+# Check for CMF 2.1 or above
+try:
+    from Products.CMFDefault.utils import getBrowserCharset
+except ImportError:
+    CMF21 = 0
+else:
+    CMF21 = 1
 
 from Globals import PersistentMapping
 from Testing.ZopeTestCase import transaction

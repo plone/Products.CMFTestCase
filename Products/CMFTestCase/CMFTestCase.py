@@ -14,6 +14,7 @@ from Testing.ZopeTestCase import PortalTestCase
 from setup import CMF15
 from setup import CMF16
 from setup import CMF20
+from setup import CMF21
 from setup import portal_name
 from setup import portal_owner
 from setup import default_products
