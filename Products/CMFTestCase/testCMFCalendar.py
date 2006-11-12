@@ -12,7 +12,7 @@ CMFTestCase.installProduct('CMFCalendar')
 
 profiles = ('CMFCalendar:default',)
 
-if CMFTestCase.CMF20:
+if CMFTestCase.CMF21:
     profiles = ('Products.CMFCalendar:default',)
 
 if CMFTestCase.CMF16:
