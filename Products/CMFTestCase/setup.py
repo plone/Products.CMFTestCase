@@ -86,7 +86,7 @@ default_password = ZopeTestCase.user_password
 default_base_profile = 'CMFDefault:default'
 default_extension_profiles = ()
 
-if CMF20:
+if CMF21:
     default_base_profile = 'Products.CMFDefault:default'
 
 
