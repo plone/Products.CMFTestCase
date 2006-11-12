@@ -8,26 +8,12 @@ from Testing import ZopeTestCase
 
 ZopeTestCase.installProduct('CMFCore')
 ZopeTestCase.installProduct('CMFDefault')
+ZopeTestCase.installProduct('CMFCalendar')
+ZopeTestCase.installProduct('CMFTopic')
+ZopeTestCase.installProduct('DCWorkflow')
 ZopeTestCase.installProduct('CMFUid', quiet=1)
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
-
-# Check for Zope3 interfaces
-try:
-    from zope.interface.interfaces import IInterface
-except ImportError:
-    Z3INTERFACES = 0
-else:
-    from interfaces import ICMFTestCase
-    Z3INTERFACES = IInterface.providedBy(ICMFTestCase)
-
-# Check for Zope 2.9 or above
-try:
-    import zope.testing.testrunner
-except ImportError:
-    USELAYER = 0
-else:
-    USELAYER = 1
 
 # Check for CMF 1.5 or above
 try:
@@ -44,10 +30,6 @@ except ImportError:
     CMF16 = 0
 else:
     CMF16 = 1
-    ZopeTestCase.installProduct('DCWorkflow')
-    # For BBB
-    if not USELAYER:
-        ZopeTestCase.installProduct('Five')
 
 # Check for CMF 2.0 or above
 try:
@@ -65,12 +47,35 @@ except ImportError:
 else:
     CMF21 = 1
 
-from Globals import PersistentMapping
+# Check for layer support
+try:
+    import zope.testing.testrunner
+except ImportError:
+    USELAYER = 0
+else:
+    USELAYER = 1
+
+# BBB: Zope 2.8
+if CMF16 and not USELAYER:
+    ZopeTestCase.installProduct('Five')
+
+# Check for Zope3 interfaces
+try:
+    from zope.interface.interfaces import IInterface
+except ImportError:
+    Z3INTERFACES = 0
+else:
+    from interfaces import ICMFTestCase
+    Z3INTERFACES = IInterface.providedBy(ICMFTestCase)
+
 from Testing.ZopeTestCase import transaction
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from Acquisition import aq_base
 from time import time
+from Globals import PersistentMapping
+
+import utils
 
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
@@ -78,7 +83,6 @@ default_products = ()
 default_user = ZopeTestCase.user_name
 default_password = ZopeTestCase.user_password
 
-# CMF 1.6
 default_base_profile = 'CMFDefault:default'
 default_extension_profiles = ()
 
@@ -90,14 +94,10 @@ def setupCMFSite(id=portal_name, products=default_products, quiet=0,
                  base_profile=default_base_profile,
                  extension_profiles=default_extension_profiles):
     '''Creates a CMF site and/or installs products into it.'''
-    PortalSetup(id, products, quiet, base_profile, extension_profiles).run()
-
-if USELAYER:
-    import utils
-    setupCMFSite = utils.safe_load_site_wrapper(setupCMFSite)
+    SiteSetup(id, products, quiet, base_profile, extension_profiles).run()
 
 
-class PortalSetup:
+class SiteSetup:
     '''Creates a CMF site and/or installs products into it.'''
 
     def __init__(self, id, products, quiet, base_profile, extension_profiles):
@@ -106,6 +106,7 @@ class PortalSetup:
         self.quiet = quiet
         self.base_profile = base_profile
         self.extension_profiles = tuple(extension_profiles)
+        self._loaded = 0
 
     def run(self):
         self.app = self._app()
@@ -118,46 +119,42 @@ class PortalSetup:
                 # Log in and create site
                 self._login(uf, portal_owner)
                 self._optimize()
+                self._setupCA()
                 self._setupCMFSite()
+                self._setupRegistries()
             if hasattr(aq_base(self.app), self.id):
                 # Log in as portal owner
                 self._login(uf, portal_owner)
+                self._setupProfiles()
                 self._setupProducts()
         finally:
             self._abort()
             self._close()
             self._logout()
+            self._cleanup()
 
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
         # Starting with CMF 1.6 site creation is based on GenericSetup
         if CMF16:
-            self._setupCMFSite_genericsetup()
+            self._setupCMFSite_with_genericsetup()
         else:
-            self._setupCMFSite_portalgenerator()
+            self._setupCMFSite_with_portalgenerator()
 
-    def _setupCMFSite_genericsetup(self):
-        '''Creates a CMF site with GenericSetup.'''
+    def _setupCMFSite_with_genericsetup(self):
+        '''Creates the site using GenericSetup.'''
         start = time()
         if self.base_profile != default_base_profile:
-            self._print('Adding CMF Site (%s) ... ' % self.base_profile)
+            self._print('Adding CMF Site (%s) ... ' % (self.base_profile,))
         else:
             self._print('Adding CMF Site ... ')
-        # Add CMF site
         factory.addConfiguredSite(self.app, self.id, snapshot=0,
-                                  profile_id=self.base_profile,
-                                  extension_ids=self.extension_profiles)
+                                  profile_id=self.base_profile)
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
-        # Report applied expension profiles
-        if (self.extension_profiles and
-            self.extension_profiles != default_extension_profiles):
-            s = len(self.extension_profiles) != 1 and 's' or ''
-            self._print('  Applied extension profile%s %s.\n' %
-                        (s, ', '.join(self.extension_profiles)))
 
-    def _setupCMFSite_portalgenerator(self):
-        '''Creates a CMF site with PortalGenerator.'''
+    def _setupCMFSite_with_portalgenerator(self):
+        '''Creates the site using PortalGenerator.'''
         start = time()
         self._print('Adding CMF Site ... ')
         from Products.CMFDefault.Portal import manage_addCMFSite
@@ -165,19 +162,47 @@ class PortalSetup:
         self._commit()
         self._print('done (%.3fs)\n' % (time()-start,))
 
-    def _setupProducts(self):
-        '''Installs products into the CMF site.'''
-        portal = self.app[self.id]
-        if not hasattr(portal, '_installedProducts'):
-            portal._installedProducts = PersistentMapping()
+    def _setupRegistries(self):
+        '''Installs persistent registries.'''
+        portal = getattr(self.app, self.id)
+        if not hasattr(portal, '_installed_profiles'):
+            portal._installed_profiles = PersistentMapping()
             self._commit()
+        if not hasattr(portal, '_installed_products'):
+            portal._installed_products = PersistentMapping()
+            self._commit()
+
+    def _setupProfiles(self):
+        '''Imports extension profiles into the site.'''
+        portal = getattr(self.app, self.id)
+        setup = getattr(portal, 'portal_setup', None)
+        if setup is not None:
+            for profile in self.extension_profiles:
+                if not portal._installed_profiles.has_key(profile):
+                    self._setupCA()
+                    start = time()
+                    self._print('Adding %s ... ' % (profile,))
+                    saved = setup.getImportContextID()
+                    try:
+                        setup.setImportContext('profile-%s' % (profile,))
+                        setup.runAllImportSteps()
+                    finally:
+                        setup.setImportContext(saved)
+                    portal._installed_profiles[profile] = 1
+                    self._commit()
+                    self._print('done (%.3fs)\n' % (time()-start,))
+
+    def _setupProducts(self):
+        '''Installs products into the site.'''
+        portal = getattr(self.app, self.id)
         for product in self.products:
-            if not portal._installedProducts.has_key(product):
+            if not portal._installed_products.has_key(product):
+                self._setupCA()
                 start = time()
                 self._print('Adding %s ... ' % (product,))
-                exec 'from Products.%s.Extensions.Install import install' % product
+                exec 'from Products.%s.Extensions.Install import install' % (product,)
                 install(portal)
-                portal._installedProducts[product] = 1
+                portal._installed_products[product] = 1
                 self._commit()
                 self._print('done (%.3fs)\n' % (time()-start,))
 
@@ -214,6 +239,17 @@ class PortalSetup:
         '''Prints msg to stderr.'''
         if not self.quiet:
             ZopeTestCase._print(msg)
+
+    def _setupCA(self):
+        '''Sets up the CA by loading etc/site.zcml.'''
+        if USELAYER and not self._loaded:
+            utils.safe_load_site()
+            self._loaded = 1
+
+    def _cleanup(self):
+        '''Cleans up the CA.'''
+        if USELAYER:
+            utils.cleanUp()
 
 
 def _optimize():

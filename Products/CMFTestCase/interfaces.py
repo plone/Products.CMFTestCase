@@ -18,10 +18,16 @@ class ICMFSecurity(IPortalSecurity):
 
 class ICMFTestCase(IPortalTestCase):
 
+    def addProfile(name):
+        '''Imports an extension profile into the CMF site.
+           This is an alternative to passing the 'extension_profiles'
+           argument to 'setupCMFSite'.
+        '''
+
     def addProduct(name):
         '''Installs a product into the CMF site by executing
            its 'Extensions.Install.install' function.
-           This is an alternative to passing a 'products'
+           This is an alternative to passing the 'products'
            argument to 'setupCMFSite'.
         '''
 

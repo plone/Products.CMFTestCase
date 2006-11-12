@@ -94,14 +94,32 @@ class CMFTestCase(PortalTestCase):
             user = user.__of__(uf)
         newSecurityManager(None, user)
 
-    def addProduct(self, name):
-        '''Installs a product into the CMF site.'''
+    def addProfile(self, name):
+        '''Imports an extension profile into the site.'''
         sm = getSecurityManager()
         self.loginAsPortalOwner()
         try:
-            installed = getattr(self.portal, '_installedProducts', {})
+            installed = getattr(self.portal, '_installed_profiles', {})
             if not installed.has_key(name):
-                exec 'from Products.%s.Extensions.Install import install' % name
+                setup = self.portal.portal_setup
+                saved = setup.getImportContextID()
+                try:
+                    setup.setImportContext('profile-%s' % (name,))
+                    setup.runAllImportSteps()
+                finally:
+                    setup.setImportContext(saved)
+                self._refreshSkinData()
+        finally:
+            setSecurityManager(sm)
+
+    def addProduct(self, name):
+        '''Installs a product into the site.'''
+        sm = getSecurityManager()
+        self.loginAsPortalOwner()
+        try:
+            installed = getattr(self.portal, '_installed_products', {})
+            if not installed.has_key(name):
+                exec 'from Products.%s.Extensions.Install import install' % (name,)
                 install(self.portal)
                 self._refreshSkinData()
         finally:
