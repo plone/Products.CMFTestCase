@@ -15,6 +15,8 @@ from setup import CMF15
 from setup import CMF16
 from setup import CMF20
 from setup import CMF21
+from setup import USELAYER
+from setup import Z3INTERFACES
 from setup import portal_name
 from setup import portal_owner
 from setup import default_products
@@ -22,6 +24,7 @@ from setup import default_base_profile
 from setup import default_extension_profiles
 from setup import default_user
 from setup import default_password
+
 from setup import setupCMFSite
 
 from interfaces import ICMFTestCase
@@ -32,23 +35,22 @@ from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from warnings import warn
 
-import setup
 import utils
 
 
 class CMFTestCase(PortalTestCase):
     '''Base test case for CMF testing'''
 
-    if setup.Z3INTERFACES:
+    if Z3INTERFACES:
         from zope.interface import implements
         implements(ICMFTestCase, ICMFSecurity)
     else:
         __implements__ = (ICMFTestCase, ICMFSecurity,
                           PortalTestCase.__implements__)
 
-    if setup.USELAYER:
+    if USELAYER:
         import layer
-        layer = layer.ZCMLLayer
+        layer = layer.CMFSite
 
     def _portal(self):
         '''Returns the portal object for a test.'''
@@ -129,7 +131,7 @@ class CMFTestCase(PortalTestCase):
 class FunctionalTestCase(Functional, CMFTestCase):
     '''Base class for functional CMF tests'''
 
-    if not setup.Z3INTERFACES:
+    if not Z3INTERFACES:
         __implements__ = (Functional.__implements__,
                           CMFTestCase.__implements__)
 

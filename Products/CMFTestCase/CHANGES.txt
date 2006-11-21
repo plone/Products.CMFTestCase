@@ -6,6 +6,8 @@
 - Added a CMFTestCase.addProfile() method that allows to import
   extension profiles into the site. This is an alternative to
   passing the 'extension_profiles' argument to setupCMFSite().
+- Create the CMF site lazily using layer.CMFSite.
+- Renamed utils.py to five.py.
 
 0.8.6
 - Made sure layer cleanup resets Five.zcml to "not initialized".

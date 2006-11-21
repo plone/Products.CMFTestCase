@@ -75,8 +75,6 @@ from Acquisition import aq_base
 from time import time
 from Globals import PersistentMapping
 
-import utils
-
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
 default_products = ()
@@ -89,12 +87,17 @@ default_extension_profiles = ()
 if CMF21:
     default_base_profile = 'Products.CMFDefault:default'
 
+_deferred_setup = []
+
 
 def setupCMFSite(id=portal_name, products=default_products, quiet=0,
                  base_profile=default_base_profile,
                  extension_profiles=default_extension_profiles):
     '''Creates a CMF site and/or installs products into it.'''
-    SiteSetup(id, products, quiet, base_profile, extension_profiles).run()
+    if USELAYER:
+        _deferred_setup.append((id, products, 1, base_profile, extension_profiles))
+    else:
+        SiteSetup(id, products, quiet, base_profile, extension_profiles).run()
 
 
 class SiteSetup:
@@ -106,7 +109,6 @@ class SiteSetup:
         self.quiet = quiet
         self.base_profile = base_profile
         self.extension_profiles = tuple(extension_profiles)
-        self._loaded = 0
 
     def run(self):
         self.app = self._app()
@@ -119,7 +121,6 @@ class SiteSetup:
                 # Log in and create site
                 self._login(uf, portal_owner)
                 self._optimize()
-                self._setupCA()
                 self._setupCMFSite()
                 self._setupRegistries()
             if hasattr(aq_base(self.app), self.id):
@@ -131,7 +132,6 @@ class SiteSetup:
             self._abort()
             self._close()
             self._logout()
-            self._cleanup()
 
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
@@ -179,7 +179,6 @@ class SiteSetup:
         if setup is not None:
             for profile in self.extension_profiles:
                 if not portal._installed_profiles.has_key(profile):
-                    self._setupCA()
                     start = time()
                     self._print('Adding %s ... ' % (profile,))
                     saved = setup.getImportContextID()
@@ -197,7 +196,6 @@ class SiteSetup:
         portal = getattr(self.app, self.id)
         for product in self.products:
             if not portal._installed_products.has_key(product):
-                self._setupCA()
                 start = time()
                 self._print('Adding %s ... ' % (product,))
                 exec 'from Products.%s.Extensions.Install import install' % (product,)
@@ -240,16 +238,34 @@ class SiteSetup:
         if not self.quiet:
             ZopeTestCase._print(msg)
 
-    def _setupCA(self):
-        '''Sets up the CA by loading etc/site.zcml.'''
-        if USELAYER and not self._loaded:
-            utils.safe_load_site()
-            self._loaded = 1
 
-    def _cleanup(self):
-        '''Cleans up the CA.'''
-        if USELAYER:
-            utils.cleanUp()
+class SiteCleanup(SiteSetup):
+    '''Removes a site.'''
+
+    def __init__(self, id):
+        self.id = id
+
+    def run(self):
+        self.app = self._app()
+        try:
+            if hasattr(aq_base(self.app), self.id):
+                self.app._delObject(self.id)
+                self._commit()
+        finally:
+            self._abort()
+            self._close()
+
+
+def deferredSetup():
+    '''Called by layer to setup site(s).'''
+    for site in _deferred_setup:
+        SiteSetup(*site).run()
+
+
+def cleanUp():
+    '''Called by layer to remove site(s).'''
+    for site in _deferred_setup:
+        SiteCleanup(site[0]).run()
 
 
 def _optimize():

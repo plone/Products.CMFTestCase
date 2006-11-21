@@ -47,8 +47,8 @@ CMFTestCase Readme
         - The constant 'CMF21' which evaluates to true for CMF versions
           >= 2.1.
 
-        - The module 'utils' which contains all utils from the ZopeTestCase
-          package as well as additional functions for layer support.
+        - The module 'utils' which contains all utility functions from the
+          ZopeTestCase package.
 
 
     Example CMFTestCase::
