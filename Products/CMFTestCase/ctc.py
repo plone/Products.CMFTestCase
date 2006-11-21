@@ -13,6 +13,7 @@ from Testing.ZopeTestCase import Functional
 from Products.CMFTestCase import utils
 from Products.CMFTestCase.utils import *
 
+from Products.CMFTestCase import setup
 from Products.CMFTestCase.setup import CMF15
 from Products.CMFTestCase.setup import CMF16
 from Products.CMFTestCase.setup import CMF20
