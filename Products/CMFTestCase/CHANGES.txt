@@ -1,4 +1,4 @@
-0.9.0 (Unreleased)
+0.9.0
 - Added CMF21 constant.
 - Prepared for switching ZopeTestCase to Zope3 interfaces.
 - Load etc/site.zcml lazily instead of using the wrapper.
