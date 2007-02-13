@@ -55,10 +55,6 @@ except ImportError:
 else:
     USELAYER = 1
 
-# BBB: Zope 2.8
-if CMF16 and not USELAYER:
-    ZopeTestCase.installProduct('Five')
-
 # Check for Zope3 interfaces
 try:
     from zope.interface.interfaces import IInterface
@@ -67,6 +63,10 @@ except ImportError:
 else:
     from interfaces import ICMFTestCase
     Z3INTERFACES = IInterface.providedBy(ICMFTestCase)
+
+# BBB: Zope 2.8
+if CMF16 and not USELAYER:
+    ZopeTestCase.installProduct('Five')
 
 from Testing.ZopeTestCase import transaction
 from AccessControl.SecurityManagement import newSecurityManager
@@ -87,17 +87,30 @@ default_extension_profiles = ()
 if CMF21:
     default_base_profile = 'Products.CMFDefault:default'
 
-_deferred_setup = []
 
-
-def setupCMFSite(id=portal_name, products=default_products, quiet=0,
+def setupCMFSite(id=portal_name,
+                 products=default_products,
+                 quiet=0,
                  base_profile=default_base_profile,
                  extension_profiles=default_extension_profiles):
     '''Creates a CMF site and/or installs products into it.'''
     if USELAYER:
-        _deferred_setup.append((id, products, 1, base_profile, extension_profiles))
-    else:
-        SiteSetup(id, products, quiet, base_profile, extension_profiles).run()
+        quiet = 1
+        cleanupCMFSite(id)
+    SiteSetup(id, products, quiet, base_profile, extension_profiles).run()
+
+if USELAYER:
+    import layer
+    setupCMFSite = layer.onsetup(setupCMFSite)
+
+
+def cleanupCMFSite(id):
+    '''Removes a site.'''
+    SiteCleanup(id).run()
+
+if USELAYER:
+    import layer
+    cleanupCMFSite = layer.onteardown(cleanupCMFSite)
 
 
 class SiteSetup:
@@ -135,7 +148,6 @@ class SiteSetup:
 
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
-        # Starting with CMF 1.6 site creation is based on GenericSetup
         if CMF16:
             self._setupCMFSite_with_genericsetup()
         else:
@@ -254,18 +266,6 @@ class SiteCleanup(SiteSetup):
         finally:
             self._abort()
             self._close()
-
-
-def deferredSetup():
-    '''Called by layer to setup site(s).'''
-    for site in _deferred_setup:
-        SiteSetup(*site).run()
-
-
-def cleanUp():
-    '''Called by layer to remove site(s).'''
-    for site in _deferred_setup:
-        SiteCleanup(site[0]).run()
 
 
 def _optimize():

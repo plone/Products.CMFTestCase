@@ -87,8 +87,10 @@ class CMFTestCase(PortalTestCase):
         folder.__ac_local_roles__ = None
         folder.manage_setLocalRoles(name, ['Owner'])
 
+    # Security interface
+
     def loginAsPortalOwner(self):
-        '''Use this if - AND ONLY IF - you need to manipulate the
+        '''Use if - AND ONLY IF - you need to manipulate the
            portal object itself.
         '''
         uf = self.app.acl_users
@@ -96,6 +98,8 @@ class CMFTestCase(PortalTestCase):
         if not hasattr(user, 'aq_base'):
             user = user.__of__(uf)
         newSecurityManager(None, user)
+
+    # CMF interface
 
     def addProfile(self, name):
         '''Imports an extension profile into the site.'''
