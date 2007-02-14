@@ -1,5 +1,5 @@
 CMFTestCase 0.9.0
-(c) 2003-2006, Stefan H. Holek, stefan@epy.co.at
+(c) 2003-2007, Stefan H. Holek, stefan@epy.co.at
 http://plone.org/products/cmftestcase
 License: ZPL
 Zope: 2.6-2.10
@@ -21,7 +21,8 @@ CMFTestCase Readme
           Note: 'setupCMFSite' accepts an optional 'products' argument, which
           allows you to specify a list of products that will be added to the
           portal. Product installation is performed via the canonical
-          'Extensions.Install.install' function.
+          'Extensions.Install.install' function. Since 0.8.2 you can also pass
+          an 'extension_profiles' argument to import GS extension profiles.
 
         - The class 'CMFTestCase' of which to derive your test cases.
 
