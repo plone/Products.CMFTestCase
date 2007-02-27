@@ -131,20 +131,22 @@ class SiteSetup:
                 # Add portal owner
                 uf.userFolderAddUser(portal_owner, default_password, ['Manager'], [])
             if not hasattr(aq_base(self.app), self.id):
-                # Log in and create site
+                # Add site
                 self._login(uf, portal_owner)
                 self._optimize()
                 self._setupCMFSite()
                 self._setupRegistries()
             if hasattr(aq_base(self.app), self.id):
-                # Log in as portal owner
+                # Configure site
                 self._login(uf, portal_owner)
+                self._placefulSetUp()
                 self._setupProfiles()
                 self._setupProducts()
         finally:
             self._abort()
             self._close()
             self._logout()
+            self._placefulTearDown()
 
     def _setupCMFSite(self):
         '''Creates the CMF site.'''
@@ -216,6 +218,17 @@ class SiteSetup:
                 self._commit()
                 self._print('done (%.3fs)\n' % (time()-start,))
 
+    def _placefulSetUp(self):
+        '''Sets the local site/manager.'''
+        if CMF21:
+            portal = getattr(self.app, self.id)
+            _placefulSetUp(portal)
+
+    def _placefulTearDown(self):
+        '''Resets the local site/manager.'''
+        if CMF21:
+            _placefulTearDown()
+
     def _optimize(self):
         '''Applies optimizations to the PortalGenerator.'''
         _optimize()
@@ -261,11 +274,31 @@ class SiteCleanup(SiteSetup):
         self.app = self._app()
         try:
             if hasattr(aq_base(self.app), self.id):
+                self._placefulSetUp()
                 self.app._delObject(self.id)
                 self._commit()
         finally:
             self._abort()
             self._close()
+            self._placefulTearDown()
+
+
+def _placefulSetUp(portal):
+    '''Sets the local site/manager.'''
+    from zope.app.component.hooks import setHooks, setSite
+    from zope.component.interfaces import ComponentLookupError
+    setHooks()
+    try:
+        setSite(portal)
+    except ComponentLookupError:
+        pass
+
+
+def _placefulTearDown():
+    '''Resets the local site/manager.'''
+    from zope.app.component.hooks import resetHooks, setSite
+    resetHooks()
+    setSite()
 
 
 def _optimize():

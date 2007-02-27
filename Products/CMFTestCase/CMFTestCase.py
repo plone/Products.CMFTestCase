@@ -24,6 +24,8 @@ from setup import default_base_profile
 from setup import default_extension_profiles
 from setup import default_user
 from setup import default_password
+from setup import _placefulSetUp
+from setup import _placefulTearDown
 
 from setup import setupCMFSite
 
@@ -55,20 +57,25 @@ class CMFTestCase(PortalTestCase):
 
     def _portal(self):
         '''Returns the portal object for a test.'''
-        try:
-            return self.getPortal(1)
-        except TypeError:
-            return self.getPortal()
+        portal = self.getPortal()
+        if CMF21:
+            _placefulSetUp(portal)
+        return portal
 
-    def getPortal(self, called_by_framework=0):
-        '''Returns the portal object to the setup code.
+    def _clear(self, call_close_hook=0):
+        '''Clears the fixture.'''
+        PortalTestCase._clear(self, call_close_hook)
+        if CMF21:
+            _placefulTearDown()
 
-           DO NOT CALL THIS METHOD! Use the self.portal
+    # Portal interface
+
+    def getPortal(self):
+        '''Returns the portal object.
+
+           Do not call this method! Use the self.portal
            attribute to access the portal object from tests.
         '''
-        if not called_by_framework:
-            warn('Calling getPortal is not allowed, please use the '
-                 'self.portal attribute.', UserWarning, 2)
         return getattr(self.app, portal_name)
 
     def createMemberarea(self, name):
