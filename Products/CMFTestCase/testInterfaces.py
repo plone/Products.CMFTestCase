@@ -27,10 +27,6 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
     def _portal(self):
         return None
 
-    def testIProfiled(self):
-        self.failUnless(verifyClass(IProfiled, CMFTestCase.CMFTestCase))
-        self.failUnless(verifyObject(IProfiled, self))
-
     def testIPortalTestCase(self):
         self.failUnless(verifyClass(IPortalTestCase, CMFTestCase.CMFTestCase))
         self.failUnless(verifyObject(IPortalTestCase, self))
@@ -54,10 +50,6 @@ class TestFunctionalTestCase(CMFTestCase.FunctionalTestCase):
     def testIFunctional(self):
         self.failUnless(verifyClass(IFunctional, CMFTestCase.FunctionalTestCase))
         self.failUnless(verifyObject(IFunctional, self))
-
-    def testIProfiled(self):
-        self.failUnless(verifyClass(IProfiled, CMFTestCase.FunctionalTestCase))
-        self.failUnless(verifyObject(IProfiled, self))
 
     def testIPortalTestCase(self):
         self.failUnless(verifyClass(IPortalTestCase, CMFTestCase.FunctionalTestCase))
