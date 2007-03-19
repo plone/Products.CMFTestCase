@@ -7,6 +7,7 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from Products.CMFTestCase import CMFTestCase
+from Acquisition import aq_base
 
 CMFTestCase.setupCMFSite()
 default_user = CMFTestCase.default_user
@@ -53,6 +54,12 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
     def testSkinScript(self):
         self.folder.invokeFactory('Document', id='doc', title='Foo')
         self.assertEqual(self.folder.doc.TitleOrId(), 'Foo')
+
+    if CMFTestCase.CMF21:
+
+        def testGetSite(self):
+            from zope.app.component.hooks import getSite
+            self.failUnless(aq_base(getSite()) is aq_base(self.portal))
 
 
 def test_suite():
