@@ -29,10 +29,8 @@ class TestCalendar(CMFTestCase.CMFTestCase):
     def testToolsInstalled(self):
         self.failUnless(hasattr(self.portal, 'portal_calendar'))
 
-    if not CMFTestCase.CMF21:
-
-        def testSkinsInstalled(self):
-            self.failUnless(hasattr(self.portal, 'event_view'))
+    def testSkinsInstalled(self):
+        self.failUnless(hasattr(self.portal, 'document_view'))
 
     def testTypesInstalled(self):
         types = self.portal.portal_types.objectIds()
