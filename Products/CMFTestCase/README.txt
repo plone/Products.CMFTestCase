@@ -1,4 +1,4 @@
-CMFTestCase 0.9.2
+CMFTestCase 0.9.4
 (c) 2003-2007, Stefan H. Holek, stefan@epy.co.at
 http://plone.org/products/cmftestcase
 License: ZPL
