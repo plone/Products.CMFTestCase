@@ -1,4 +1,4 @@
-0.9.6
+0.9.6 (SVN/UNRELEASED)
 - Deal with new skin setup in CMF 2.1 and up.
 - Provide hasPackage and installPackage if ZopeTestCase supports it.
 
