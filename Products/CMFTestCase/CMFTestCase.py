@@ -62,6 +62,14 @@ class CMFTestCase(PortalTestCase):
             _placefulSetUp(portal)
         return portal
 
+    def _setup(self):
+        '''Configures the portal. Framework authors may
+           override.
+        '''
+        PortalTestCase._setup(self)
+        if CMF21 and self.portal is not None:
+            self._refreshSkinData()
+
     def _clear(self, call_close_hook=0):
         '''Clears the fixture.'''
         PortalTestCase._clear(self, call_close_hook)
