@@ -62,10 +62,25 @@ class TestCMFTestCase(CMFTestCase.CMFTestCase):
             self.failUnless(aq_base(getSite()) is aq_base(self.portal))
 
 
+class TestVersionConstants(CMFTestCase.CMFTestCase):
+
+    def testConstants(self):
+        if CMFTestCase.CMF16:
+            self.failUnless(CMFTestCase.CMF15)
+        if CMFTestCase.CMF20:
+            self.failUnless(CMFTestCase.CMF16)
+            self.failUnless(CMFTestCase.CMF15)
+        if CMFTestCase.CMF21:
+            self.failUnless(CMFTestCase.CMF20)
+            self.failUnless(CMFTestCase.CMF16)
+            self.failUnless(CMFTestCase.CMF15)
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestCMFTestCase))
+    suite.addTest(makeSuite(TestVersionConstants))
     return suite
 
 if __name__ == '__main__':

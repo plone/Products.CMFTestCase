@@ -30,6 +30,7 @@ except ImportError:
     CMF16 = 0
 else:
     CMF16 = 1
+    CMF15 = 1
 
 # Check for CMF 2.0 or above
 try:
@@ -38,6 +39,8 @@ except ImportError:
     CMF20 = 0
 else:
     CMF20 = 1
+    CMF16 = 1
+    CMF15 = 1
 
 # Check for CMF 2.1 or above
 try:
@@ -46,6 +49,9 @@ except ImportError:
     CMF21 = 0
 else:
     CMF21 = 1
+    CMF20 = 1
+    CMF16 = 1
+    CMF15 = 1
 
 # Check for layer support
 try:
