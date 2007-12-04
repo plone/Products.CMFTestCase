@@ -1,4 +1,4 @@
-
+0.9.7
 - The CMFSite layer can now be set up more than once.
 
 0.9.6
