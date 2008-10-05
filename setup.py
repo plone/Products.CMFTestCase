@@ -1,14 +1,12 @@
 from setuptools import setup, find_packages
-import os
 
-version = '1.0.0dev'
+version = '0.9.8b1'
 
 setup(name='Products.CMFTestCase',
       version=version,
       description="Integration testing framework for CMF.",
       long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?:action=list_classifiers
+                       open("CHANGES.txt").read(),
       classifiers=[
         "Framework :: CMF",
         "Programming Language :: Python",
@@ -25,9 +23,5 @@ setup(name='Products.CMFTestCase',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
       ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
-      )
+)
