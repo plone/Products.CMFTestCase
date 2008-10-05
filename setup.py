@@ -8,7 +8,8 @@ setup(name='Products.CMFTestCase',
       long_description=open("README.txt").read() + "\n" +
                        open("CHANGES.txt").read(),
       classifiers=[
-        "Framework :: CMF",
+        #"Framework :: CMF",
+        "Framework :: Zope2",
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
