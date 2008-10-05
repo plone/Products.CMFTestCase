@@ -6,11 +6,11 @@
 
 from Testing import ZopeTestCase
 
-ZopeTestCase.installProduct('CMFCore')
-ZopeTestCase.installProduct('CMFDefault')
-ZopeTestCase.installProduct('CMFCalendar')
-ZopeTestCase.installProduct('CMFTopic')
-ZopeTestCase.installProduct('DCWorkflow')
+ZopeTestCase.installProduct('CMFCore', quiet=1)
+ZopeTestCase.installProduct('CMFDefault', quiet=1)
+ZopeTestCase.installProduct('CMFCalendar', quiet=1)
+ZopeTestCase.installProduct('CMFTopic', quiet=1)
+ZopeTestCase.installProduct('DCWorkflow', quiet=1)
 ZopeTestCase.installProduct('CMFUid', quiet=1)
 ZopeTestCase.installProduct('MailHost', quiet=1)
 ZopeTestCase.installProduct('ZCTextIndex', quiet=1)
