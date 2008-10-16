@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.9.8 - Unreleased
+------------------
+
+- Bugfix: Reindex security of member-area after taking ownership.
+  [stefan]
+
 0.9.8b2 - 2008-10-08
 --------------------
 
