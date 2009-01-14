@@ -79,7 +79,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from Acquisition import aq_base
 from time import time
-from Globals import PersistentMapping
+from Persistence import PersistentMapping
 
 portal_name = 'cmf'
 portal_owner = 'portal_owner'
