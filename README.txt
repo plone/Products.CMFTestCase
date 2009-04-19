@@ -53,6 +53,9 @@ The CMFTestCase package provides
 - The constant ``CMF21`` which evaluates to true for CMF versions
   >= 2.1.
 
+- The constant ``CMF22`` which evaluates to true for CMF versions
+  >= 2.2.
+
 - The module ``utils`` which contains all utility functions from the
   ZopeTestCase package.
 

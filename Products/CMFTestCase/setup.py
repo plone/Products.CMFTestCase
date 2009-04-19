@@ -53,6 +53,18 @@ else:
     CMF16 = 1
     CMF15 = 1
 
+# Check for CMF 2.2 or above
+try:
+    from Products.CMFDefault.utils import IBrowserRequest
+except ImportError:
+    CMF22 = 0
+else:
+    CMF22 = 1
+    CMF21 = 1
+    CMF20 = 1
+    CMF16 = 1
+    CMF15 = 1
+
 # Check for layer support
 try:
     import zope.testing.testrunner

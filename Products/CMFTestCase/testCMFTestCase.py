@@ -74,6 +74,11 @@ class TestVersionConstants(CMFTestCase.CMFTestCase):
             self.failUnless(CMFTestCase.CMF20)
             self.failUnless(CMFTestCase.CMF16)
             self.failUnless(CMFTestCase.CMF15)
+        if CMFTestCase.CMF22:
+            self.failUnless(CMFTestCase.CMF21)
+            self.failUnless(CMFTestCase.CMF20)
+            self.failUnless(CMFTestCase.CMF16)
+            self.failUnless(CMFTestCase.CMF15)
 
 
 def test_suite():

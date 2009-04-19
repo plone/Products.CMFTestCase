@@ -7,6 +7,9 @@ Changelog
 - Fixed deprecation warnings for use of Globals.
   [hannosch]
 
+- Added CMF22 constant.
+  [stefan]
+
 0.9.8b4 - 2008-10-26
 --------------------
 

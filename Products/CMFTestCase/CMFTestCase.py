@@ -21,6 +21,7 @@ from setup import CMF15
 from setup import CMF16
 from setup import CMF20
 from setup import CMF21
+from setup import CMF22
 from setup import USELAYER
 from setup import Z3INTERFACES
 from setup import portal_name
