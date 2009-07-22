@@ -22,6 +22,9 @@ setup(name='Products.CMFTestCase',
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
+      extras_require=dict(
+          test=['Products.CMFCalendar'],
+      ),
       install_requires=[
           'setuptools',
       ],
