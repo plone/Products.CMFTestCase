@@ -4,7 +4,7 @@ Changelog
 0.9.9
 -----
 
-- Noted `Products.CMFCalendar` as a test dependency.
+- Specify all dependencies in a backwards compatible way.
   [hannosch]
 
 0.9.8 - 2009-04-19
