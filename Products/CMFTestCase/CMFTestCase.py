@@ -106,7 +106,8 @@ class CMFTestCase(PortalTestCase):
         folder.changeOwnership(user)
         folder.__ac_local_roles__ = None
         folder.manage_setLocalRoles(name, ['Owner'])
-        folder.reindexObjectSecurity()
+        if hasattr(folder, 'reindexObjectSecurity'):
+            folder.reindexObjectSecurity()
 
     # Security interface
 

@@ -4,6 +4,10 @@ Changelog
 0.9.9
 -----
 
+- Call reindexObjectSecurity on the member folder conditionally, as CMF 2.2's
+  PortalFolder no longer has this method.
+  [davisagli]
+
 - Specify all dependencies in a backwards compatible way.
   [hannosch]
 
