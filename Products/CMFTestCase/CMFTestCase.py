@@ -42,6 +42,7 @@ from interfaces import ICMFSecurity
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
+from Acquisition import aq_base
 from warnings import warn
 
 import utils
@@ -106,7 +107,7 @@ class CMFTestCase(PortalTestCase):
         folder.changeOwnership(user)
         folder.__ac_local_roles__ = None
         folder.manage_setLocalRoles(name, ['Owner'])
-        if hasattr(folder, 'reindexObjectSecurity'):
+        if hasattr(aq_base(folder), 'reindexObjectSecurity'):
             folder.reindexObjectSecurity()
 
     # Security interface
