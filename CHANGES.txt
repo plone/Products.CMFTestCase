@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.9.9
------
+0.9.9 - Unreleased
+------------------
 
 - Call reindexObjectSecurity on the member folder conditionally, as CMF 2.2's
   PortalFolder no longer has this method.
