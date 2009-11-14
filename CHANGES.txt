@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.9.9 - Unreleased
+0.9.9 - 2009-11-14
 ------------------
 
 - Call reindexObjectSecurity on the member folder conditionally, as CMF 2.2's
