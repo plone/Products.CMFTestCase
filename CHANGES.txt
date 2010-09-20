@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.9.11 - Unreleased
+0.9.11 - 2010-09-20
 -------------------
 
 - Fix the cleanup method called by safe_load_site to mark the component
