@@ -5,15 +5,7 @@
 # $Id$
 
 from __future__ import nested_scopes
-
-try:
-    from zope.testing.cleanup import cleanUp as _cleanUp
-except ImportError:
-    try:
-        from zope.app.testing.placelesssetup import tearDown as _cleanUp
-    except ImportError:
-        # Zope < 2.8
-        def _cleanUp(): pass
+from zope.testing.cleanup import cleanUp as _cleanUp
 
 
 def cleanUp():

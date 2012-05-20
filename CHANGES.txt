@@ -4,6 +4,9 @@ Changelog
 0.9.12 - Unreleased
 -------------------
 
+- Use getSite from zope.component.
+  [hannosch]
+
 0.9.11 - 2010-09-20
 -------------------
 
@@ -11,7 +14,6 @@ Changelog
   registry as uninitialized regardless of whether the flag is in
   Zope2.App.zcml or Products.Five.zcml.
   [davisagli]
-
 
 0.9.10 - 2010-07-13
 -------------------
